@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { 
   ArrowRight, Check, CheckCircle2, ChevronRight, 
-  ExternalLink, Laptop, Monitor, Play, ShieldCheck, Sparkles, TrendingUp 
+  ExternalLink, Laptop, Menu, Monitor, Play, ShieldCheck, Sparkles, TrendingUp, X 
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('showcase'); // 'showcase' or 'advertising'
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [formData, setFormData] = useState({
     handle: '',
     contact: '',
@@ -25,7 +26,20 @@ export default function App() {
     setIsSubmitted(true);
   };
 
+  const scrollToSection = (id) => {
+    setMobileMenuOpen(false);
+    if (id === 'home') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+    const elem = document.getElementById(id);
+    if (elem) {
+      elem.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   const scrollToForm = () => {
+    setMobileMenuOpen(false);
     document.getElementById('creator-form')?.scrollIntoView({ behavior: 'smooth' });
   };
 
@@ -34,35 +48,103 @@ export default function App() {
       
       {/* Apple-style Translucent Blur Navbar */}
       <header className="sticky top-0 z-50 apple-blur-nav border-b border-black/[0.06] transition-all">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-2">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-4">
           
-          <a href="#" className="flex items-center gap-2 text-sm font-semibold tracking-tight text-[#1d1d1f] shrink-0">
-            <div className="w-5 h-5 rounded-md bg-[#1d1d1f] text-white flex items-center justify-center text-xs font-bold">
+          {/* Logo */}
+          <button 
+            onClick={() => scrollToSection('home')}
+            className="flex items-center gap-2 text-sm sm:text-base font-semibold tracking-tight text-[#1d1d1f] shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
+          >
+            <div className="w-6 h-6 rounded-md bg-[#1d1d1f] text-white flex items-center justify-center text-xs font-bold shadow-xs">
               F
             </div>
             <span>Forge Creator</span>
-          </a>
-
-          {/* Status Badge Pill */}
-          <div className="hidden sm:flex items-center gap-2 text-xs bg-[#f5f5f7] border border-black/[0.04] px-3.5 py-1 rounded-full text-[#515154]">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#34c759] animate-pulse" />
-            <span>Now Accepting <strong className="text-[#1d1d1f] font-semibold">Q2 Creator Cohort</strong></span>
-          </div>
-
-          <button
-            onClick={scrollToForm}
-            className="text-xs font-medium px-3.5 sm:px-4 py-1.5 rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white transition-all cursor-pointer shadow-sm shadow-[#0071e3]/20 shrink-0 active:scale-95"
-          >
-            Start Build
           </button>
+
+          {/* Desktop Navigation Links */}
+          <nav className="hidden md:flex items-center gap-1 text-sm font-medium text-[#6e6e73]">
+            <button
+              onClick={() => scrollToSection('home')}
+              className="px-3 py-1.5 rounded-full hover:text-[#1d1d1f] hover:bg-black/[0.04] transition-all cursor-pointer"
+            >
+              Home
+            </button>
+            <button
+              onClick={() => scrollToSection('about')}
+              className="px-3 py-1.5 rounded-full hover:text-[#1d1d1f] hover:bg-black/[0.04] transition-all cursor-pointer"
+            >
+              About
+            </button>
+            <button
+              onClick={() => scrollToSection('collaborators')}
+              className="px-3 py-1.5 rounded-full hover:text-[#1d1d1f] hover:bg-black/[0.04] transition-all cursor-pointer"
+            >
+              Recent Collaborators
+            </button>
+          </nav>
+
+          {/* Right Action & Mobile Hamburger */}
+          <div className="flex items-center gap-2.5">
+            <button
+              onClick={scrollToForm}
+              className="text-xs sm:text-sm font-medium px-4 py-1.5 sm:py-2 rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white transition-all cursor-pointer shadow-sm shadow-[#0071e3]/20 shrink-0 active:scale-95"
+            >
+              Start Build
+            </button>
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-1.5 rounded-lg text-[#1d1d1f] hover:bg-black/[0.05] transition-colors cursor-pointer"
+              aria-label="Toggle Navigation Menu"
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
         </div>
+
+        {/* Mobile Dropdown Navigation Menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden bg-white/95 backdrop-blur-md border-b border-black/[0.08] px-4 pt-3 pb-5 space-y-3 shadow-lg animate-in fade-in slide-in-from-top-2 duration-200">
+            <div className="flex flex-col space-y-1">
+              <button
+                onClick={() => scrollToSection('home')}
+                className="text-left px-3 py-2.5 rounded-xl text-sm font-medium text-[#1d1d1f] hover:bg-black/[0.04] transition-colors"
+              >
+                Home
+              </button>
+              <button
+                onClick={() => scrollToSection('about')}
+                className="text-left px-3 py-2.5 rounded-xl text-sm font-medium text-[#1d1d1f] hover:bg-black/[0.04] transition-colors"
+              >
+                About
+              </button>
+              <button
+                onClick={() => scrollToSection('collaborators')}
+                className="text-left px-3 py-2.5 rounded-xl text-sm font-medium text-[#1d1d1f] hover:bg-black/[0.04] transition-colors"
+              >
+                Recent Collaborators
+              </button>
+            </div>
+
+            <div className="pt-2 border-t border-black/[0.06]">
+              <button
+                onClick={scrollToForm}
+                className="w-full py-2.5 rounded-xl text-sm font-semibold bg-[#0071e3] hover:bg-[#0077ed] text-white transition-all shadow-sm shadow-[#0071e3]/25 flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <span>Start Build</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        )}
       </header>
 
       {/* Main Content */}
       <main className="max-w-5xl mx-auto px-4 sm:px-6 pt-10 sm:pt-16 pb-20 sm:pb-28 space-y-16 sm:space-y-24">
         
         {/* Apple-Style Hero */}
-        <section className="text-center max-w-3xl mx-auto space-y-5 sm:space-y-6">
+        <section id="home" className="text-center max-w-3xl mx-auto space-y-5 sm:space-y-6 scroll-mt-20">
           
           {/* Eyebrow badge */}
           <div className="inline-flex max-w-full items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1 rounded-full text-[11px] sm:text-xs font-medium bg-[#f5f5f7] border border-black/[0.06] text-[#6e6e73] animate-gentle-float">
@@ -106,7 +188,8 @@ export default function App() {
         </section>
 
         {/* Featured Collaboration Card */}
-        <section id="showcase" className="space-y-4">
+        <section id="collaborators" className="space-y-4 scroll-mt-20">
+          <div id="showcase" />
           <div className="text-center space-y-1 pb-1 sm:pb-2">
             <span className="text-xs font-semibold tracking-wider uppercase text-[#0071e3]">Featured Showcase</span>
             <h2 className="text-2xl sm:text-3xl font-bold text-[#1d1d1f] tracking-tight">
@@ -214,7 +297,7 @@ export default function App() {
         </section>
 
         {/* 3 Clean Apple Bento Features */}
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+        <section id="about" className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 scroll-mt-20">
           <div className="bg-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl border border-black/[0.06] shadow-[0_4px_24px_rgba(0,0,0,0.03)] space-y-2.5 sm:space-y-3">
             <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-[#f5f5f7] flex items-center justify-center text-xs sm:text-sm font-semibold text-[#1d1d1f]">
               01
@@ -247,7 +330,7 @@ export default function App() {
         </section>
 
         {/* The Star of the Page: Apple-Style Minimal Form */}
-        <section id="creator-form" className="max-w-xl mx-auto space-y-4">
+        <section id="creator-form" className="max-w-xl mx-auto space-y-4 scroll-mt-20">
           <div className="text-center space-y-1 px-2">
             <span className="text-xs font-semibold tracking-wider uppercase text-[#0071e3]">Get Started</span>
             <h2 className="text-2xl sm:text-3xl font-bold text-[#1d1d1f] tracking-tight">
