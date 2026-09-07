@@ -17,9 +17,9 @@ const COUPONS = {
 };
 
 const BASE_PRICES = {
-  Basic: 199,
-  Standard: 399,
-  Premium: 799
+  Basic: 249,
+  Standard: 436,
+  Premium: 936
 };
 
 export default function App() {
@@ -182,7 +182,7 @@ export default function App() {
 
   // Live price calculation for a given plan
   const getPlanPrice = (planName) => {
-    const original = BASE_PRICES[planName] || 199;
+    const original = BASE_PRICES[planName] || 249;
     if (!appliedCoupon) {
       return {
         original,
