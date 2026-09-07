@@ -16,17 +16,40 @@ const COUPONS = {
   'SETUPRIZX': { discountPercent: 20, label: '20% Off Special Discount' }
 };
 
+// Base prices in INR
 const BASE_PRICES = {
   Basic: 249,
   Standard: 436,
   Premium: 936
 };
 
-// Anchor / list prices for visitors without a coupon
+// Anchor / list prices in INR for visitors without a coupon
 const ANCHOR_PRICES = {
-  Basic: '300',
-  Standard: '500',
-  Premium: '1,000'
+  Basic: 300,
+  Standard: 500,
+  Premium: 1000
+};
+
+// Exchange rates from INR to other currencies (1 INR = X foreign currency)
+const INR_TO_CURRENCY = {
+  INR: 1,
+  USD: 0.0116,
+  EUR: 0.0108,
+  GBP: 0.0092,
+  CAD: 0.0160,
+  AUD: 0.0178,
+  AED: 0.0425
+};
+
+// Formats an INR amount into the target currency representation
+const formatCurrencyPrice = (inrAmount, currency = 'INR') => {
+  const rate = INR_TO_CURRENCY[currency] || 1;
+  const symbol = CURRENCY_SYMBOLS[currency] || '₹';
+  if (currency === 'INR') {
+    return `${symbol}${Math.round(inrAmount).toLocaleString()}`;
+  }
+  const converted = inrAmount * rate;
+  return `${symbol}${converted.toFixed(2)}`;
 };
 
 export default function App() {
@@ -189,26 +212,39 @@ export default function App() {
     setCouponError('');
   };
 
-  // Live price calculation for a given plan
-  const getPlanPrice = (planName) => {
-    const original = BASE_PRICES[planName] || 249;
+  // Live price calculation for a given plan converted to the user's selected currency
+  const getPlanPrice = (planName, currency = formData.currency) => {
+    const originalINR = BASE_PRICES[planName] || 249;
+    const anchorINR = ANCHOR_PRICES[planName] || 300;
+
     if (!appliedCoupon) {
       return {
-        original,
-        discounted: original,
+        originalINR,
+        anchorINR,
+        currency,
+        formattedAnchor: formatCurrencyPrice(anchorINR, currency),
+        formattedOriginal: formatCurrencyPrice(originalINR, currency),
+        formattedDiscounted: formatCurrencyPrice(originalINR, currency),
         isDiscounted: false,
         percent: 0,
-        savings: 0
+        savingsText: ''
       };
     }
-    const discountAmount = Math.round(original * (appliedCoupon.discountPercent / 100));
-    const discounted = Math.max(0, original - discountAmount);
+
+    const discountAmountINR = Math.round(originalINR * (appliedCoupon.discountPercent / 100));
+    const discountedINR = Math.max(0, originalINR - discountAmountINR);
+
     return {
-      original,
-      discounted,
+      originalINR,
+      anchorINR,
+      discountedINR,
+      currency,
+      formattedAnchor: formatCurrencyPrice(anchorINR, currency),
+      formattedOriginal: formatCurrencyPrice(originalINR, currency),
+      formattedDiscounted: formatCurrencyPrice(discountedINR, currency),
       isDiscounted: true,
       percent: appliedCoupon.discountPercent,
-      savings: discountAmount
+      savingsText: formatCurrencyPrice(discountAmountINR, currency)
     };
   };
 
@@ -268,13 +304,14 @@ export default function App() {
       spread: 70,
       origin: { y: 0.65 }
     });
+    const pricing = getPlanPrice(formData.plan, formData.currency);
     setSubmittedBuildSummary({
       fullName: formData.fullName,
       email: formData.email,
       plan: formData.plan,
       currency: formData.currency,
       appliedCoupon: appliedCoupon,
-      finalPrice: getPlanPrice(formData.plan).discounted
+      formattedFinalPrice: pricing.formattedDiscounted
     });
     resetAllForms();
     setIsSubmitted(true);
@@ -1282,9 +1319,9 @@ export default function App() {
                   <p style={{ margin: 0, fontSize: 15, color: '#6b6f72', maxWidth: 480, lineHeight: 1.6 }}>
                     Thank you, <strong>{submittedBuildSummary?.fullName || 'there'}</strong>! We received your request for the <strong>{submittedBuildSummary?.plan || 'selected'}</strong> plan
                     {submittedBuildSummary?.appliedCoupon ? (
-                      <> with coupon <strong style={{ color: '#0891b2' }}>{submittedBuildSummary.appliedCoupon.code}</strong> (<strong>{submittedBuildSummary.appliedCoupon.discountPercent}% OFF</strong>, total: <strong>{CURRENCY_SYMBOLS[submittedBuildSummary.currency] || '₹'}{submittedBuildSummary.finalPrice}</strong>)</>
+                      <> with coupon <strong style={{ color: '#0891b2' }}>{submittedBuildSummary.appliedCoupon.code}</strong> (<strong>{submittedBuildSummary.appliedCoupon.discountPercent}% OFF</strong>, total: <strong>{submittedBuildSummary.formattedFinalPrice}</strong>)</>
                     ) : (
-                      <> (total: <strong>{CURRENCY_SYMBOLS[submittedBuildSummary?.currency || formData.currency] || '₹'}{submittedBuildSummary?.finalPrice || '249'}</strong>)</>
+                      <> (total: <strong>{submittedBuildSummary?.formattedFinalPrice || formatCurrencyPrice(BASE_PRICES[submittedBuildSummary?.plan || 'Basic'] || 249, submittedBuildSummary?.currency || 'INR')}</strong>)</>
                     )}
                     {' '}and will reply to <strong>{submittedBuildSummary?.email || 'your email'}</strong> within 24 hours.
                   </p>
@@ -1698,22 +1735,22 @@ export default function App() {
                             {pricing.isDiscounted ? (
                               <>
                                 <span style={{ textDecoration: 'line-through', color: '#cbd5e1', fontSize: 12, fontWeight: 400 }}>
-                                  {currSymbol}300
+                                  {pricing.formattedAnchor}
                                 </span>
                                 <span style={{ textDecoration: 'line-through', color: '#94a3b8', fontSize: 14, fontWeight: 500 }}>
-                                  {currSymbol}{pricing.original}
+                                  {pricing.formattedOriginal}
                                 </span>
                                 <span style={{ fontWeight: 700, fontSize: 18, color: '#0891b2' }}>
-                                  {currSymbol}{pricing.discounted}
+                                  {pricing.formattedDiscounted}
                                 </span>
                               </>
                             ) : (
                               <>
                                 <span style={{ textDecoration: 'line-through', color: '#94a3b8', fontSize: 14, fontWeight: 500 }}>
-                                  {currSymbol}300
+                                  {pricing.formattedAnchor}
                                 </span>
                                 <span style={{ fontWeight: 700, fontSize: 17, color: '#15BCDF' }}>
-                                  {currSymbol}{pricing.original}
+                                  {pricing.formattedOriginal}
                                 </span>
                               </>
                             )}
@@ -1721,7 +1758,7 @@ export default function App() {
                         </div>
                         {pricing.isDiscounted && (
                           <div style={{ fontSize: 11, color: '#0891b2', fontWeight: 700, marginTop: 4 }}>
-                            🎉 You save {currSymbol}{pricing.savings} with coupon "{appliedCoupon.code}"!
+                            🎉 You save {pricing.savingsText} with coupon "{appliedCoupon.code}"!
                           </div>
                         )}
                         <p style={{ margin: '6px 0 0 0', fontSize: 13, color: '#6b6f72', lineHeight: 1.5 }}>
@@ -1734,7 +1771,6 @@ export default function App() {
                   {/* Plan: Standard */}
                   {(() => {
                     const pricing = getPlanPrice('Standard');
-                    const currSymbol = CURRENCY_SYMBOLS[formData.currency] || '₹';
                     return (
                       <div
                         onClick={() => setFormData({ ...formData, plan: 'Standard' })}
@@ -1774,22 +1810,22 @@ export default function App() {
                             {pricing.isDiscounted ? (
                               <>
                                 <span style={{ textDecoration: 'line-through', color: '#cbd5e1', fontSize: 12, fontWeight: 400 }}>
-                                  {currSymbol}500
+                                  {pricing.formattedAnchor}
                                 </span>
                                 <span style={{ textDecoration: 'line-through', color: '#94a3b8', fontSize: 14, fontWeight: 500 }}>
-                                  {currSymbol}{pricing.original}
+                                  {pricing.formattedOriginal}
                                 </span>
                                 <span style={{ fontWeight: 700, fontSize: 18, color: '#0891b2' }}>
-                                  {currSymbol}{pricing.discounted}
+                                  {pricing.formattedDiscounted}
                                 </span>
                               </>
                             ) : (
                               <>
                                 <span style={{ textDecoration: 'line-through', color: '#94a3b8', fontSize: 14, fontWeight: 500 }}>
-                                  {currSymbol}500
+                                  {pricing.formattedAnchor}
                                 </span>
                                 <span style={{ fontWeight: 700, fontSize: 17, color: '#15BCDF' }}>
-                                  {currSymbol}{pricing.original}
+                                  {pricing.formattedOriginal}
                                 </span>
                               </>
                             )}
@@ -1797,7 +1833,7 @@ export default function App() {
                         </div>
                         {pricing.isDiscounted && (
                           <div style={{ fontSize: 11, color: '#0891b2', fontWeight: 700, marginTop: 4 }}>
-                            🎉 You save {currSymbol}{pricing.savings} with coupon "{appliedCoupon.code}"!
+                            🎉 You save {pricing.savingsText} with coupon "{appliedCoupon.code}"!
                           </div>
                         )}
                         <p style={{ margin: '6px 0 0 0', fontSize: 13, color: '#6b6f72', lineHeight: 1.5 }}>
@@ -1810,7 +1846,6 @@ export default function App() {
                   {/* Plan: Premium */}
                   {(() => {
                     const pricing = getPlanPrice('Premium');
-                    const currSymbol = CURRENCY_SYMBOLS[formData.currency] || '₹';
                     return (
                       <div
                         onClick={() => setFormData({ ...formData, plan: 'Premium' })}
@@ -1850,22 +1885,22 @@ export default function App() {
                             {pricing.isDiscounted ? (
                               <>
                                 <span style={{ textDecoration: 'line-through', color: '#cbd5e1', fontSize: 12, fontWeight: 400 }}>
-                                  {currSymbol}1,000
+                                  {pricing.formattedAnchor}
                                 </span>
                                 <span style={{ textDecoration: 'line-through', color: '#94a3b8', fontSize: 14, fontWeight: 500 }}>
-                                  {currSymbol}{pricing.original}
+                                  {pricing.formattedOriginal}
                                 </span>
                                 <span style={{ fontWeight: 700, fontSize: 18, color: '#0891b2' }}>
-                                  {currSymbol}{pricing.discounted}
+                                  {pricing.formattedDiscounted}
                                 </span>
                               </>
                             ) : (
                               <>
                                 <span style={{ textDecoration: 'line-through', color: '#94a3b8', fontSize: 14, fontWeight: 500 }}>
-                                  {currSymbol}1,000
+                                  {pricing.formattedAnchor}
                                 </span>
                                 <span style={{ fontWeight: 700, fontSize: 17, color: '#15BCDF' }}>
-                                  {currSymbol}{pricing.original}
+                                  {pricing.formattedOriginal}
                                 </span>
                               </>
                             )}
@@ -1873,7 +1908,7 @@ export default function App() {
                         </div>
                         {pricing.isDiscounted && (
                           <div style={{ fontSize: 11, color: '#0891b2', fontWeight: 700, marginTop: 4 }}>
-                            🎉 You save {currSymbol}{pricing.savings} with coupon "{appliedCoupon.code}"!
+                            🎉 You save {pricing.savingsText} with coupon "{appliedCoupon.code}"!
                           </div>
                         )}
                         <p style={{ margin: '6px 0 0 0', fontSize: 13, color: '#6b6f72', lineHeight: 1.5 }}>
