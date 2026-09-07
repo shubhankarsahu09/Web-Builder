@@ -14,16 +14,16 @@ export default function Navbar({ onOpenModal, onOpenCollab }) {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-purple-500"></span>
             </span>
-            <span className="font-semibold text-purple-300 flex-shrink-0">RECENT COLLABORATION:</span>
+            <span className="font-semibold text-purple-300 flex-shrink-0">LATEST SHOWCASE:</span>
             <span className="truncate">
-              We teamed up with <strong className="text-white font-medium">@setuprizx</strong> to build their aesthetic battlestation & sponsor showcase hub!
+              Explore our new aesthetic battlestation & brand sponsorship showcase hub!
             </span>
           </div>
           <button
             onClick={onOpenCollab}
             className="flex-shrink-0 text-purple-300 hover:text-white font-medium inline-flex items-center gap-1 transition-colors group cursor-pointer text-xs underline underline-offset-4"
           >
-            <span>View Collab Case Study</span>
+            <span>View Showcase Case Study</span>
             <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
           </button>
         </div>
@@ -58,7 +58,7 @@ export default function Navbar({ onOpenModal, onOpenCollab }) {
               className="text-purple-300 hover:text-white flex items-center gap-1.5 bg-purple-500/10 px-3 py-1 rounded-full border border-purple-500/30 transition-colors cursor-pointer"
             >
               <Monitor className="w-3.5 h-3.5 text-purple-400" />
-              <span>@setuprizx Collab</span>
+              <span>Featured Showcase</span>
             </button>
             <a href="#services" className="hover:text-purple-300 transition-colors">What We Build</a>
             <a href="#calculator" className="hover:text-purple-300 transition-colors">Ad Calculator</a>
@@ -110,7 +110,7 @@ export default function Navbar({ onOpenModal, onOpenCollab }) {
                 className="text-left text-purple-300 hover:text-purple-200 py-1 flex items-center gap-2"
               >
                 <Monitor className="w-4 h-4 text-purple-400" />
-                <span>Featured Collab: @setuprizx</span>
+                <span>Featured Showcase Hub</span>
               </button>
               <a 
                 href="#services" 

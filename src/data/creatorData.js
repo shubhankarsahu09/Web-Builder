@@ -1,9 +1,9 @@
-export const setuprizxCollabData = {
-  creatorName: "setuprizx",
-  handle: "@setuprizx",
+export const featuredCreatorData = {
+  creatorName: "StudioZenith",
+  handle: "@studiozenith",
   title: "The Ultimate Battlestation & Desk Setup Showcase",
-  badge: "Featured Official Collaboration",
-  tagline: "How we turned setuprizx's desk aesthetic curation into a high-converting, 6-figure hardware sponsorship machine.",
+  badge: "Featured Creator Showcase",
+  tagline: "How we turned high-end desk aesthetic curation into a high-converting, 6-figure hardware sponsorship machine.",
   metrics: [
     { label: "Sponsor Deal Conversion", value: "+340%", change: "vs Google Drive pitch decks" },
     { label: "Monthly Unique Viewers", value: "145K+", change: "organic creator traffic" },
@@ -31,13 +31,13 @@ export const setuprizxCollabData = {
 
 export const portfolioProjects = [
   {
-    id: "setuprizx",
-    title: "setuprizx - Setup & Battlestation Hub",
-    creator: "setuprizx",
-    handle: "@setuprizx",
+    id: "studio-zenith",
+    title: "Studio Zenith - Setup & Battlestation Hub",
+    creator: "StudioZenith",
+    handle: "@studiozenith",
     category: "Tech & Setups",
     featured: true,
-    tag: "Recent Collab",
+    tag: "Featured Hub",
     description: "Sleek hardware showcase, interactive gear rack with affiliate monetization, and dynamic sponsor deck.",
     image: "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=800&q=80",
     stats: { views: "145k/mo", sponsors: "38 brands", deals: "+340%" },
@@ -138,7 +138,7 @@ export const servicesData = [
   {
     icon: "ShoppingBag",
     title: "Gear Racks & 'Shop The Setup'",
-    description: "Inspired by our work with setuprizx: Turn your desk setup, camera gear, and favorite equipment into high-yield affiliate & sponsored gear pages.",
+    description: "Turn your desk setup, camera gear, and favorite equipment into high-yield affiliate & sponsored gear pages.",
     highlights: ["Clickable gear hotspots", "Affiliate tag automations", "Exclusive brand discount codes", "Direct sponsor attribution"]
   },
   {
@@ -176,14 +176,14 @@ export const pricingPlans = [
   },
   {
     name: "Pro Creator + Media Kit",
-    badge: "Most Popular • As seen with @setuprizx",
+    badge: "Most Popular",
     price: "$1,399",
     period: "one-time",
     description: "The complete setup tailored for full-time creators, streamers, and hardware reviewers who actively negotiate 4-to-5 figure brand deals.",
     features: [
       "Custom 6-Page High-End Creator Website",
       "Interactive Live Media Kit & Rate Card",
-      "Interactive 'Shop The Setup' Gear Rack (like @setuprizx)",
+      "Interactive 'Shop The Setup' Gear Rack",
       "Automated Brand Sponsor Inquiry Funnel & Booking",
       "Live Twitch / YouTube Status & Feed Integration",
       "Email Capture & Lead Magnet Integration",
@@ -216,10 +216,10 @@ export const pricingPlans = [
 
 export const creatorTestimonials = [
   {
-    quote: "Our collaboration with the team changed everything. Brands like Keychron and Razer used to treat us as just another Instagram page; now we send them to our dedicated setuprizx hub, and deal closures take days instead of weeks.",
-    name: "Setuprizx",
+    quote: "Our website build changed everything. Brands like Keychron and Razer used to treat us as just another social page; now we send them to our dedicated portal, and deal closures take days instead of weeks.",
+    name: "Studio Zenith",
     role: "Desk & Battlestation Curator",
-    handle: "@setuprizx",
+    handle: "@studiozenith",
     avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80",
     verified: true,
     stats: "38+ Active Brand Deals"
@@ -250,8 +250,8 @@ export const faqItems = [
     answer: "Linktree and Beacons are great for quick links, but when six-figure brands and marketing agencies consider sponsorships, a generic bio-link looks amateur. A custom domain website with an interactive media kit, brand case studies, verified demographic metrics, and an integrated gear rack positions you as a premium professional business entity, commanding 2x to 5x higher sponsorship rates."
   },
   {
-    question: "How did you work with @setuprizx on their showcase?",
-    answer: "We partnered with @setuprizx to build their flagship battlestation and desk aesthetics hub. We engineered an interactive 'Shop The Setup' module where fans click gear hotspots to view specs and buy directly, integrated an advertising portal for hardware and tech brands, and built a live media kit showcasing their reach. The result was a +340% increase in sponsor conversion."
+    question: "How does the custom showcase increase brand sponsorship conversions?",
+    answer: "We engineer an interactive 'Shop The Setup' module where fans click gear hotspots to view specs and buy directly, integrate an advertising portal for hardware and tech brands, and build a live media kit showcasing your reach. The result is typically a +300% or greater increase in sponsor inquiry conversions."
   },
   {
     question: "How does the advertising & brand sponsorship system work?",

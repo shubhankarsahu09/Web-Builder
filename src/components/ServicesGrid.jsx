@@ -95,7 +95,7 @@ export default function ServicesGrid({ onOpenModal }) {
               Ready to replace your link in bio with an enterprise creator hub?
             </h4>
             <p className="text-sm text-slate-300 max-w-2xl">
-              From desk setup curators like <strong className="text-white">@setuprizx</strong> to top streamers and filmmakers, our custom web builds deliver an immediate return on investment.
+              From hardware and desk setup curators to top streamers and filmmakers, our custom web builds deliver an immediate return on investment.
             </p>
           </div>
           <button

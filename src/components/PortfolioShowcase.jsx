@@ -3,7 +3,7 @@ import {
   Sparkles, ExternalLink, ArrowRight, Eye, TrendingUp, 
   Users, CheckCircle2, Star, ShieldCheck, X 
 } from 'lucide-react';
-import { portfolioProjects, setuprizxCollabData } from '../data/creatorData';
+import { portfolioProjects, featuredCreatorData } from '../data/creatorData';
 
 export default function PortfolioShowcase({ onOpenCollab, onOpenModal }) {
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -34,7 +34,7 @@ export default function PortfolioShowcase({ onOpenCollab, onOpenModal }) {
           </h2>
 
           <p className="text-slate-300 text-base sm:text-lg">
-            Explore recent custom websites engineered for content creators, hardware curators like <strong className="text-white">@setuprizx</strong>, streamers, and filmmakers.
+            Explore recent custom websites engineered for content creators, hardware curators, streamers, and filmmakers.
           </p>
         </div>
 
@@ -58,12 +58,12 @@ export default function PortfolioShowcase({ onOpenCollab, onOpenModal }) {
         {/* Projects Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredProjects.map((project) => {
-            const isSetuprizx = project.id === 'setuprizx';
+            const isFeaturedHub = project.featured;
             return (
               <div
                 key={project.id}
                 className={`rounded-2xl overflow-hidden bg-[#121325] border transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1.5 shadow-xl ${
-                  isSetuprizx 
+                  isFeaturedHub 
                     ? 'border-purple-500/60 shadow-purple-950/70 relative ring-1 ring-purple-500/40' 
                     : 'border-white/10 hover:border-purple-500/40'
                 }`}
@@ -146,12 +146,12 @@ export default function PortfolioShowcase({ onOpenCollab, onOpenModal }) {
 
                   {/* Action Button */}
                   <div className="pt-1">
-                    {isSetuprizx ? (
+                    {isFeaturedHub ? (
                       <button
                         onClick={onOpenCollab}
                         className="w-full py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-purple-900/30"
                       >
-                        <span>View @setuprizx Deep Dive</span>
+                        <span>View Showcase Deep Dive</span>
                         <ArrowRight className="w-3.5 h-3.5" />
                       </button>
                     ) : (

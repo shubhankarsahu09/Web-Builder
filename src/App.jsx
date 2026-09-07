@@ -10,7 +10,7 @@ export default function App() {
   const [formData, setFormData] = useState({
     handle: '',
     contact: '',
-    creatorNiche: 'Tech & Desk Setups (like @setuprizx)',
+    creatorNiche: 'Tech & Desk Setups',
     primaryGoal: 'Both (Showcase + Brand Deals)'
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -43,10 +43,10 @@ export default function App() {
             <span>Forge Creator</span>
           </a>
 
-          {/* Collab Badge Pill */}
+          {/* Status Badge Pill */}
           <div className="hidden sm:flex items-center gap-2 text-xs bg-[#f5f5f7] border border-black/[0.04] px-3.5 py-1 rounded-full text-[#515154]">
             <span className="w-1.5 h-1.5 rounded-full bg-[#34c759] animate-pulse" />
-            <span>Collab with <strong className="text-[#1d1d1f] font-semibold">@setuprizx</strong></span>
+            <span>Now Accepting <strong className="text-[#1d1d1f] font-semibold">Q2 Creator Cohort</strong></span>
           </div>
 
           <button
@@ -67,7 +67,7 @@ export default function App() {
           {/* Eyebrow badge */}
           <div className="inline-flex max-w-full items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1 rounded-full text-[11px] sm:text-xs font-medium bg-[#f5f5f7] border border-black/[0.06] text-[#6e6e73] animate-gentle-float">
             <span className="w-1.5 h-1.5 rounded-full bg-[#0071e3] shrink-0" />
-            <span className="truncate">Official Web Partner for <strong className="text-[#1d1d1f]">@setuprizx</strong></span>
+            <span className="truncate">Websites & Media Portals for <strong className="text-[#1d1d1f]">Top Creators</strong></span>
           </div>
 
           {/* Main Headline */}
@@ -96,21 +96,21 @@ export default function App() {
             </button>
 
             <a
-              href="#collab"
+              href="#showcase"
               className="w-full sm:w-auto justify-center px-6 py-3 rounded-full text-sm font-medium bg-[#f5f5f7] hover:bg-[#e8e8ed] text-[#1d1d1f] transition-all cursor-pointer flex items-center gap-1.5 active:scale-[0.98]"
             >
-              <span>View @setuprizx Collab</span>
+              <span>View Featured Showcase</span>
               <ChevronRight className="w-4 h-4 text-[#86868b]" />
             </a>
           </div>
         </section>
 
-        {/* Featured Collaboration Card: @setuprizx (Apple Product Style) */}
-        <section id="collab" className="space-y-4">
+        {/* Featured Collaboration Card */}
+        <section id="showcase" className="space-y-4">
           <div className="text-center space-y-1 pb-1 sm:pb-2">
-            <span className="text-xs font-semibold tracking-wider uppercase text-[#0071e3]">Featured Collaboration</span>
+            <span className="text-xs font-semibold tracking-wider uppercase text-[#0071e3]">Featured Showcase</span>
             <h2 className="text-2xl sm:text-3xl font-bold text-[#1d1d1f] tracking-tight">
-              The @setuprizx Showcase
+              Curated Battlestation & Studio Hub
             </h2>
           </div>
 
@@ -122,12 +122,12 @@ export default function App() {
                 <div className="w-9 h-9 rounded-full overflow-hidden border border-black/10 shrink-0">
                   <img 
                     src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=150&q=80" 
-                    alt="setuprizx" 
+                    alt="creator avatar" 
                     className="w-full h-full object-cover" 
                   />
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-[#1d1d1f]">setuprizx.com</div>
+                  <div className="text-xs font-bold text-[#1d1d1f]">studiocraft.space</div>
                   <div className="text-[11px] text-[#86868b]">Desk Aesthetics & Hardware Curation</div>
                 </div>
               </div>
@@ -184,7 +184,7 @@ export default function App() {
                   </blockquote>
                   
                   <div className="text-xs font-medium text-[#1d1d1f]">
-                    — @setuprizx <span className="text-[#86868b] font-normal">• Verified Client</span>
+                    — Studio Curator <span className="text-[#86868b] font-normal">• Verified Client</span>
                   </div>
                 </div>
               </div>
@@ -267,7 +267,7 @@ export default function App() {
                 <div className="space-y-1">
                   <h3 className="text-xl sm:text-2xl font-bold text-[#1d1d1f]">We received your details!</h3>
                   <p className="text-xs sm:text-sm text-[#6e6e73] max-w-sm mx-auto">
-                    Just like our collaboration with <strong className="text-[#1d1d1f]">@setuprizx</strong>, we will review your channel and reply within 24 hours.
+                    We will review your channel and demographic metrics, and reply with a tailored concept within 24 hours.
                   </p>
                 </div>
                 <button
@@ -288,7 +288,7 @@ export default function App() {
                   <input 
                     type="text" 
                     required
-                    placeholder="@setuprizx or Alex"
+                    placeholder="@yourhandle or Alex"
                     value={formData.handle}
                     onChange={(e) => setFormData({ ...formData, handle: e.target.value })}
                     className="w-full px-3.5 sm:px-4 py-3 rounded-xl bg-[#f5f5f7] border border-transparent focus:border-[#0071e3] focus:bg-white text-[#1d1d1f] text-base sm:text-sm outline-none transition-all placeholder-[#86868b]"
@@ -320,7 +320,7 @@ export default function App() {
                     onChange={(e) => setFormData({ ...formData, creatorNiche: e.target.value })}
                     className="w-full px-3.5 sm:px-4 py-3 rounded-xl bg-[#f5f5f7] border border-transparent focus:border-[#0071e3] focus:bg-white text-[#1d1d1f] text-base sm:text-sm outline-none transition-all cursor-pointer"
                   >
-                    <option value="Tech & Desk Setups (like @setuprizx)">Tech & Desk Setups (like @setuprizx)</option>
+                    <option value="Tech & Desk Setups">Tech & Desk Setups</option>
                     <option value="Gaming & Streaming (Twitch / YouTube)">Gaming & Streaming (Twitch / YouTube)</option>
                     <option value="Cinematography & Video Production">Cinematography & Video Production</option>
                     <option value="Lifestyle, Tech & Fashion">Lifestyle, Tech & Fashion</option>
@@ -383,7 +383,7 @@ export default function App() {
       <footer className="border-t border-black/[0.06] bg-[#f5f5f7] py-6 sm:py-8 text-center text-xs text-[#86868b]">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 space-y-2">
           <p>© {new Date().getFullYear()} Forge Creator Sites. All rights reserved.</p>
-          <p>Official web architecture partner for <strong className="text-[#1d1d1f]">@setuprizx</strong>.</p>
+          <p>Bespoke digital portfolios and automated brand advertising hubs.</p>
         </div>
       </footer>
 

@@ -3,21 +3,21 @@ import {
   Sparkles, Check, ExternalLink, ShieldCheck, ArrowRight, 
   Layers, DollarSign, MousePointer, Flame, Star, Cpu, Monitor, Sliders, CheckCircle2, Copy 
 } from 'lucide-react';
-import { setuprizxCollabData } from '../data/creatorData';
+import { featuredCreatorData } from '../data/creatorData';
 
 export default function CollabSpotlight({ onOpenModal }) {
   const [activeTab, setActiveTab] = useState('gallery');
-  const [selectedGear, setSelectedGear] = useState(setuprizxCollabData.gearItems[0]);
+  const [selectedGear, setSelectedGear] = useState(featuredCreatorData.gearItems[0]);
   const [copiedCode, setCopiedCode] = useState(false);
 
   const copyDiscountCode = () => {
-    navigator.clipboard?.writeText('SETUPRIZX15');
+    navigator.clipboard?.writeText('STUDIO15');
     setCopiedCode(true);
     setTimeout(() => setCopiedCode(false), 2000);
   };
 
   return (
-    <section id="setuprizx" className="py-24 relative overflow-hidden bg-[#0a0a14] border-y border-purple-500/20">
+    <section id="showcase-spotlight" className="py-24 relative overflow-hidden bg-[#0a0a14] border-y border-purple-500/20">
       {/* Background accents */}
       <div className="absolute -top-40 right-1/4 w-96 h-96 bg-purple-600/10 blur-[130px] -z-10 rounded-full" />
       <div className="absolute -bottom-40 left-1/4 w-96 h-96 bg-cyan-600/10 blur-[130px] -z-10 rounded-full" />
@@ -28,22 +28,22 @@ export default function CollabSpotlight({ onOpenModal }) {
         <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-semibold bg-purple-500/20 border border-purple-500/40 text-purple-300">
             <Sparkles className="w-3.5 h-3.5 text-purple-400" />
-            <span>OFFICIAL CLIENT COLLABORATION CASE STUDY</span>
+            <span>FEATURED CREATOR SHOWCASE CASE STUDY</span>
           </div>
 
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight">
-            Elevating <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400">@setuprizx</span> Into a Hardware Sponsorship Titan
+            Elevating <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400">Desk Aesthetics</span> Into a Sponsorship Titan
           </h2>
 
           <p className="text-slate-300 text-base sm:text-lg leading-relaxed">
-            We collaborated closely with <strong className="text-white font-semibold">@setuprizx</strong> to build their flagship web experience—transforming raw desk aesthetics into an automated commercial ecosystem with 
+            We engineered a flagship web experience—transforming raw desk aesthetics into an automated commercial ecosystem with 
             <span className="text-purple-300 font-semibold"> +340% inbound sponsor conversion</span>.
           </p>
         </div>
 
-        {/* 4 Pillars Grid (What We Engineered For Setuprizx) */}
+        {/* 4 Pillars Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-14">
-          {setuprizxCollabData.metrics.map((m, idx) => (
+          {featuredCreatorData.metrics.map((m, idx) => (
             <div 
               key={idx}
               className="p-6 rounded-2xl bg-[#111222]/80 border border-white/10 hover:border-purple-500/40 transition-all duration-300 shadow-lg group relative overflow-hidden"
@@ -69,12 +69,12 @@ export default function CollabSpotlight({ onOpenModal }) {
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-lg font-bold text-white">setuprizx Digital Architecture</span>
+                  <span className="text-lg font-bold text-white">Studio Hub Digital Architecture</span>
                   <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
                     LIVE CLIENT SYSTEM
                   </span>
                 </div>
-                <p className="text-xs text-slate-400">Click tabs below to test the exact modules we developed for setuprizx</p>
+                <p className="text-xs text-slate-400">Click tabs below to test the exact modules we develop for hardware creators</p>
               </div>
             </div>
 
@@ -135,15 +135,15 @@ export default function CollabSpotlight({ onOpenModal }) {
             <div className="p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center animate-fadeIn">
               <div className="lg:col-span-7 relative group rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
                 <img 
-                  src={setuprizxCollabData.setupImage} 
-                  alt="setuprizx setup showcase" 
+                  src={featuredCreatorData.setupImage} 
+                  alt="studio setup showcase" 
                   className="w-full h-80 sm:h-[420px] object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-6">
                   <div className="space-y-2">
                     <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-black/60 backdrop-blur-md border border-white/10 text-xs text-purple-300">
                       <Sparkles className="w-3 h-3 text-purple-400" />
-                      <span>Curated by @setuprizx • Architectural Dark Walnut Edition</span>
+                      <span>Curated Studio Layout • Architectural Dark Walnut Edition</span>
                     </div>
                     <h3 className="text-xl sm:text-2xl font-bold text-white">
                       The Minimalist Ultrawide Creator Station
@@ -170,7 +170,7 @@ export default function CollabSpotlight({ onOpenModal }) {
                   <span className="text-xs font-bold uppercase tracking-wider text-purple-400">Engineered Feature</span>
                   <h4 className="text-2xl font-bold text-white mt-1">High-Definition Visual Portfolio</h4>
                   <p className="text-slate-300 text-sm mt-2 leading-relaxed">
-                    Unlike Instagram compression, our custom image delivery engine renders setuprizx's desk builds in razor-sharp 4K HDR with sub-second loading speeds.
+                    Unlike social platform compression, our custom image delivery engine renders desk builds in razor-sharp 4K HDR with sub-second loading speeds.
                   </p>
                 </div>
 
@@ -224,7 +224,7 @@ export default function CollabSpotlight({ onOpenModal }) {
                 </div>
 
                 <div className="space-y-2 pt-2">
-                  {setuprizxCollabData.gearItems.map((gear, idx) => (
+                  {featuredCreatorData.gearItems.map((gear, idx) => (
                     <button
                       key={idx}
                       onClick={() => setSelectedGear(gear)}
@@ -276,7 +276,7 @@ export default function CollabSpotlight({ onOpenModal }) {
                 {/* Interactive Promo code banner */}
                 <div className="p-4 rounded-xl bg-gradient-to-r from-purple-950/60 to-indigo-950/60 border border-purple-500/40 flex flex-col sm:flex-row items-center justify-between gap-3">
                   <div>
-                    <div className="text-xs font-bold text-white">Exclusive Setuprizx Audience Promo</div>
+                    <div className="text-xs font-bold text-white">Exclusive Studio Audience Promo</div>
                     <div className="text-[11px] text-slate-300">Use code at partner checkout for 15% discount</div>
                   </div>
                   <button
@@ -284,7 +284,7 @@ export default function CollabSpotlight({ onOpenModal }) {
                     className="w-full sm:w-auto px-3.5 py-2 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow"
                   >
                     {copiedCode ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                    <span>{copiedCode ? 'Copied to Clipboard!' : 'SETUPRIZX15'}</span>
+                    <span>{copiedCode ? 'Copied to Clipboard!' : 'STUDIO15'}</span>
                   </button>
                 </div>
 
@@ -305,7 +305,7 @@ export default function CollabSpotlight({ onOpenModal }) {
                 <span className="text-xs font-bold uppercase tracking-wider text-purple-400">Automated Pitch Deck</span>
                 <h4 className="text-2xl font-bold text-white mt-1">Live, Always-Updated Creator Media Kit</h4>
                 <p className="text-sm text-slate-300 mt-2">
-                  Brands hate static PDFs that get outdated in 2 weeks. The setuprizx media kit automatically updates engagement, subscriber counts, and ad slot availability.
+                  Brands hate static PDFs that get outdated in 2 weeks. The live creator media kit automatically updates engagement, subscriber counts, and ad slot availability.
                 </p>
               </div>
 
@@ -378,7 +378,7 @@ export default function CollabSpotlight({ onOpenModal }) {
                   </div>
                   <ul className="space-y-2 text-xs text-slate-300 pt-2 border-t border-white/10">
                     <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-cyan-400" /> 100% Category Exclusivity</li>
-                    <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-cyan-400" /> Permanent Logo on Setuprizx Header</li>
+                    <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-cyan-400" /> Permanent Logo on Website Header</li>
                     <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-cyan-400" /> Monthly analytics & conversion reporting</li>
                   </ul>
                   <button 
@@ -436,7 +436,7 @@ export default function CollabSpotlight({ onOpenModal }) {
               <div className="lg:col-span-6 bg-[#15162a] border border-white/10 rounded-2xl p-6 space-y-4">
                 <div className="flex items-center justify-between pb-3 border-b border-white/10">
                   <h5 className="font-bold text-white text-sm">Brand Campaign Ingestion Form (Live Demo)</h5>
-                  <span className="text-[11px] text-emerald-400 font-mono-code">SETUPRIZX-INBOX-GATE</span>
+                  <span className="text-[11px] text-emerald-400 font-mono-code">BRAND-INBOX-GATE</span>
                 </div>
 
                 <div className="space-y-3">
@@ -500,32 +500,32 @@ export default function CollabSpotlight({ onOpenModal }) {
             </div>
           )}
 
-          {/* Testimonial Quote Banner from setuprizx */}
+          {/* Testimonial Quote Banner */}
           <div className="p-6 sm:p-8 bg-[#15162a] border-t border-white/10 flex flex-col md:flex-row items-center gap-6">
             <div className="w-16 h-16 rounded-2xl overflow-hidden border-2 border-purple-500/60 shadow-lg flex-shrink-0">
               <img 
-                src={setuprizxCollabData.avatar} 
-                alt="setuprizx avatar" 
+                src={featuredCreatorData.avatar} 
+                alt="creator avatar" 
                 className="w-full h-full object-cover"
               />
             </div>
             <div className="space-y-2 flex-grow text-center md:text-left">
               <p className="text-sm sm:text-base text-slate-200 italic font-normal">
-                "{setuprizxCollabData.quote}"
+                "{featuredCreatorData.quote}"
               </p>
               <div className="flex flex-wrap items-center justify-center md:justify-start gap-2">
-                <span className="font-bold text-white text-sm">@setuprizx</span>
+                <span className="font-bold text-white text-sm">Studio Zenith Curator</span>
                 <span className="text-slate-500">•</span>
                 <span className="text-xs text-purple-400">Desk Setup & Battlestation Creator</span>
                 <span className="text-slate-500">•</span>
-                <span className="text-xs text-emerald-400 font-medium">Verified Client Collab</span>
+                <span className="text-xs text-emerald-400 font-medium">Verified Client Case Study</span>
               </div>
             </div>
             <button
               onClick={onOpenModal}
               className="flex-shrink-0 px-5 py-3 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold transition-all cursor-pointer shadow-md"
             >
-              Get Started Like Setuprizx
+              Build Your Custom Site
             </button>
           </div>
 

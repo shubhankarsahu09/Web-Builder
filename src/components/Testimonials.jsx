@@ -22,26 +22,26 @@ export default function Testimonials({ onOpenCollab }) {
           </h2>
 
           <p className="text-slate-300 text-base sm:text-lg">
-            Hear how our custom website builds helped creators like <strong className="text-white">@setuprizx</strong> upgrade their brand presence and close bigger sponsorship checks.
+            Hear how our custom website builds helped elite creators upgrade their brand presence and close bigger sponsorship checks.
           </p>
         </div>
 
         {/* Testimonials Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {creatorTestimonials.map((t, index) => {
-            const isSetuprizx = t.handle === '@setuprizx';
+            const isFeatured = index === 0;
             return (
               <div
                 key={index}
                 className={`p-8 rounded-3xl flex flex-col justify-between space-y-6 transition-all duration-300 shadow-xl ${
-                  isSetuprizx
+                  isFeatured
                     ? 'bg-gradient-to-b from-[#1c1a3b] to-[#121327] border-2 border-purple-500 shadow-purple-950/80 scale-[1.02] relative'
                     : 'bg-[#101124] border border-white/10 hover:border-purple-500/30'
                 }`}
               >
-                {isSetuprizx && (
+                {isFeatured && (
                   <div className="absolute -top-3.5 right-6 bg-gradient-to-r from-purple-600 to-cyan-600 text-white text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider">
-                    Official Collab Partner
+                    Featured Creator Hub
                   </div>
                 )}
 

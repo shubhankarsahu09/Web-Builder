@@ -10,7 +10,7 @@ export default function ContactModal({ isOpen, onClose, initialData }) {
     email: '',
     platform: 'YouTube & TikTok',
     budget: '$1,399 (Pro Creator Tier)',
-    niche: 'Desk Setup & Battlestation (like @setuprizx)',
+    niche: 'Desk Setup & Battlestation Hub',
     message: ''
   });
 
@@ -32,13 +32,11 @@ export default function ContactModal({ isOpen, onClose, initialData }) {
     }
   }, [initialData]);
 
-  if (!isOpen) return null;
-
   const handleSubmit = (e) => {
     e.preventDefault();
     confetti({
       particleCount: 100,
-      spread: 80,
+      spread: 70,
       origin: { y: 0.6 }
     });
     setSubmitted(true);
@@ -49,30 +47,34 @@ export default function ContactModal({ isOpen, onClose, initialData }) {
     onClose();
   };
 
+  if (!isOpen) return null;
+
   return (
-    <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
-      <div className="relative w-full max-w-2xl bg-[#111224] border border-purple-500/40 rounded-3xl p-6 sm:p-8 shadow-2xl shadow-purple-950/80 my-8">
-        
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto bg-black/80 backdrop-blur-md">
+      <div 
+        className="relative w-full max-w-xl rounded-3xl bg-[#121324] border border-purple-500/30 p-6 sm:p-10 shadow-2xl shadow-purple-950/80 my-8"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Close Button */}
-        <button
+        <button 
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white transition-colors cursor-pointer"
+          className="absolute top-5 right-5 p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-colors cursor-pointer border border-white/5"
         >
           <X className="w-5 h-5" />
         </button>
 
         {submitted ? (
-          <div className="text-center py-10 space-y-6 animate-fadeIn">
+          <div className="text-center py-8 space-y-6">
             <div className="w-16 h-16 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center mx-auto shadow-lg shadow-emerald-950/50">
-              <CheckCircle2 className="w-10 h-10" />
+              <CheckCircle2 className="w-9 h-9" />
             </div>
-
+            
             <div className="space-y-2">
               <h3 className="text-2xl sm:text-3xl font-extrabold text-white">
                 Brief Received! You're in Good Company.
               </h3>
               <p className="text-slate-300 text-sm max-w-md mx-auto">
-                Just like our collaboration with <strong className="text-purple-300">@setuprizx</strong>, our lead web architect is reviewing your channel and preparing custom wireframe recommendations.
+                Our lead web architect is reviewing your channel and preparing custom wireframe recommendations.
               </p>
             </div>
 
@@ -106,7 +108,7 @@ export default function ContactModal({ isOpen, onClose, initialData }) {
                 Let's Build Your Dream <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400">Creator Hub</span>
               </h3>
               <p className="text-xs sm:text-sm text-slate-300">
-                Join creators like <strong className="text-white">@setuprizx</strong> who doubled their sponsor deal capacity with a custom digital presence.
+                Join creators who doubled their sponsor deal capacity with a custom digital presence.
               </p>
             </div>
 
@@ -178,7 +180,7 @@ export default function ContactModal({ isOpen, onClose, initialData }) {
                     onChange={(e) => setFormData({ ...formData, platform: e.target.value })}
                     className="w-full px-4 py-2.5 rounded-xl bg-[#17182c] border border-white/10 text-white text-xs focus:outline-none focus:border-purple-500 cursor-pointer"
                   >
-                    <option value="Desk Setup & Battlestation (like @setuprizx)">Desk Setup & Battlestation (like @setuprizx)</option>
+                    <option value="Desk Setup & Battlestation Hub">Desk Setup & Battlestation Hub</option>
                     <option value="YouTube & TikTok">YouTube & TikTok</option>
                     <option value="Twitch & Live Streaming">Twitch & Live Streaming</option>
                     <option value="Cinematography & Film">Cinematography & Film</option>
@@ -196,7 +198,7 @@ export default function ContactModal({ isOpen, onClose, initialData }) {
                     className="w-full px-4 py-2.5 rounded-xl bg-[#17182c] border border-white/10 text-white text-xs focus:outline-none focus:border-purple-500 cursor-pointer"
                   >
                     <option value="$699 (Starter Creator Hub)">$699 (Starter Creator Hub)</option>
-                    <option value="$1,399 (Pro Creator Tier - like @setuprizx)">$1,399 (Pro Creator Tier - like @setuprizx)</option>
+                    <option value="$1,399 (Pro Creator Tier)">$1,399 (Pro Creator Tier)</option>
                     <option value="$2,799 (Creator Empire & Store)">$2,799 (Creator Empire & Store)</option>
                     <option value="Custom Enterprise / Agency">Custom Enterprise / Agency</option>
                   </select>

@@ -14,7 +14,7 @@ export default function CreatorBenefits({ onOpenModal }) {
     {
       feature: "Hardware & Gear Affiliate Showcase",
       linktree: "Boring plain text link list with low clickthrough",
-      customSite: "Interactive 4K battlestation hotspots (like @setuprizx)"
+      customSite: "Interactive 4K battlestation & studio gear hotspots"
     },
     {
       feature: "Brand Sponsorship Booking",
@@ -52,7 +52,7 @@ export default function CreatorBenefits({ onOpenModal }) {
           </h2>
 
           <p className="text-slate-300 text-base sm:text-lg">
-            When hardware brands like Razer, BenQ, or Keychron scout creators, they compare professional agencies against social accounts. Here is why creators like <strong className="text-white">@setuprizx</strong> transitioned to a custom site.
+            When hardware brands like Razer, BenQ, or Keychron scout creators, they compare professional agencies against social accounts. Here is why top creators transitioned to a custom site.
           </p>
         </div>
 

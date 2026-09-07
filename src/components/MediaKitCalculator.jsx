@@ -17,7 +17,7 @@ export default function MediaKitCalculator({ onOpenModal }) {
 
   const deliverablesConfig = {
     videoIntegration: { label: "Dedicated Video Walkthrough / Review", basePrice: 2400, desc: "Full 60s-90s integration or dedicated video" },
-    setupPlacement: { label: "Desk Battlestation Placement (like @setuprizx)", basePrice: 1600, desc: "Permanent product placement on curated setup" },
+    setupPlacement: { label: "Desk Battlestation / Studio Placement", basePrice: 1600, desc: "Permanent product placement on curated setup" },
     gearTag: { label: "Interactive Gear Rack Tag & Promo Code", basePrice: 950, desc: "Clickable hotspot on creator website with discount code" },
     socialBlast: { label: "Multi-Platform Social Blast (Reels / TikTok)", basePrice: 850, desc: "Cross-posted vertical short-form content" },
     newsletter: { label: "Newsletter Sponsor Banner & Blast", basePrice: 650, desc: "Dedicated header slot sent to direct email list" }
@@ -95,7 +95,7 @@ export default function MediaKitCalculator({ onOpenModal }) {
 
               <div className="flex justify-between text-[11px] text-slate-500 font-mono-code">
                 <span>20K (Emerging)</span>
-                <span>150K (like @setuprizx)</span>
+                <span>150K (Established)</span>
                 <span>500K</span>
                 <span>1M+ (S-Tier)</span>
               </div>

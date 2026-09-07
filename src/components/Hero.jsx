@@ -1,6 +1,6 @@
 import React from 'react';
 import { ArrowRight, Play, CheckCircle2, TrendingUp, Sparkles, Star, Award, Laptop, Eye, ShoppingCart } from 'lucide-react';
-import { setuprizxCollabData } from '../data/creatorData';
+import { featuredCreatorData } from '../data/creatorData';
 
 export default function Hero({ onOpenModal, onOpenCollab }) {
   return (
@@ -26,7 +26,7 @@ export default function Hero({ onOpenModal, onOpenCollab }) {
               <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
             </span>
             <Sparkles className="w-3.5 h-3.5 text-purple-400" />
-            <span>Official Web Architect for <strong className="text-white">@setuprizx</strong></span>
+            <span>Bespoke Web Architecture for <strong className="text-white">Top Creators</strong></span>
             <span className="bg-purple-500/30 px-2 py-0.5 rounded-full text-[11px] text-purple-200 border border-purple-400/30">
               New Case Study
             </span>
@@ -61,7 +61,7 @@ export default function Hero({ onOpenModal, onOpenCollab }) {
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-cyan-400" />
-              <span>Recent Collab with @setuprizx</span>
+              <span>Interactive Live Media Kits</span>
             </div>
           </div>
 
@@ -80,7 +80,7 @@ export default function Hero({ onOpenModal, onOpenCollab }) {
               className="w-full sm:w-auto px-7 py-4 rounded-xl text-base font-semibold text-slate-200 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 hover:border-purple-500/50 transition-all duration-200 flex items-center justify-center gap-3 cursor-pointer group"
             >
               <Laptop className="w-5 h-5 text-purple-400 group-hover:scale-110 transition-transform" />
-              <span>See @setuprizx Collab Showcase</span>
+              <span>See Featured Showcase</span>
             </button>
           </div>
         </div>
@@ -98,7 +98,7 @@ export default function Hero({ onOpenModal, onOpenCollab }) {
                   <div className="w-3 h-3 rounded-full bg-amber-500/80" />
                   <div className="w-3 h-3 rounded-full bg-emerald-500/80" />
                   <span className="ml-2 text-xs font-mono-code text-slate-400 hidden sm:inline-block">
-                    https://setuprizx.creatorhub.space
+                    https://studiocraft.creatorhub.space
                   </span>
                 </div>
                 <div className="flex items-center gap-3">
@@ -110,7 +110,7 @@ export default function Hero({ onOpenModal, onOpenCollab }) {
                 </div>
               </div>
 
-              {/* Inner Mockup View of the setuprizx collab */}
+              {/* Inner Mockup View */}
               <div className="p-4 sm:p-8 bg-gradient-to-b from-[#0f101f] to-[#0a0a14]">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
                   
@@ -119,14 +119,14 @@ export default function Hero({ onOpenModal, onOpenCollab }) {
                     <div className="flex items-center gap-3">
                       <div className="w-14 h-14 rounded-2xl overflow-hidden border-2 border-purple-500/50 shadow-lg shadow-purple-900/40">
                         <img 
-                          src={setuprizxCollabData.avatar} 
-                          alt="setuprizx" 
+                          src={featuredCreatorData.avatar} 
+                          alt="Studio Creator" 
                           className="w-full h-full object-cover"
                         />
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
-                          <h3 className="text-xl font-bold text-white">setuprizx</h3>
+                          <h3 className="text-xl font-bold text-white">{featuredCreatorData.creatorName}</h3>
                           <span className="px-2 py-0.5 rounded bg-purple-500/20 border border-purple-500/30 text-[11px] font-semibold text-purple-300">
                             VERIFIED CREATOR
                           </span>
@@ -145,8 +145,8 @@ export default function Hero({ onOpenModal, onOpenCollab }) {
                       
                       <div className="relative rounded-lg overflow-hidden group">
                         <img 
-                          src={setuprizxCollabData.setupImage} 
-                          alt="setuprizx battlestation" 
+                          src={featuredCreatorData.setupImage} 
+                          alt="curated battlestation" 
                           className="w-full h-48 sm:h-56 object-cover transform group-hover:scale-105 transition-transform duration-500"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-4">
@@ -241,7 +241,7 @@ export default function Hero({ onOpenModal, onOpenCollab }) {
                       onClick={onOpenCollab}
                       className="w-full py-2.5 rounded-lg bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-medium text-xs flex items-center justify-center gap-2 transition-all cursor-pointer shadow-md shadow-purple-900/30"
                     >
-                      <span>Explore the Full Setuprizx Architecture</span>
+                      <span>Explore the Full Showcase Architecture</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </button>
                   </div>
@@ -259,7 +259,7 @@ export default function Hero({ onOpenModal, onOpenCollab }) {
             </div>
             <div>
               <p className="text-xs font-bold text-white">340% Higher Sponsor Conversion</p>
-              <p className="text-[11px] text-slate-400">Validated with setuprizx pilot launch</p>
+              <p className="text-[11px] text-slate-400">Validated across creator cohort launches</p>
             </div>
           </div>
 

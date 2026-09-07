@@ -25,7 +25,7 @@ export default function Footer({ onOpenModal, onOpenCollab }) {
           <div className="space-y-3 text-center lg:text-left">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/20 text-purple-300 border border-purple-500/30">
               <Sparkles className="w-3.5 h-3.5 text-purple-400" />
-              <span>OFFICIAL ARCHITECT FOR @SETUPRIZX & TOP CREATORS</span>
+              <span>BESPOKE ARCHITECTURE FOR TOP CREATORS</span>
             </div>
             <h3 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white">
               Ready to turn your content into a high-ticket business?
@@ -48,7 +48,7 @@ export default function Footer({ onOpenModal, onOpenCollab }) {
               className="px-6 py-4 rounded-xl font-semibold text-sm text-slate-200 bg-white/5 hover:bg-white/10 border border-white/10 transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
               <Monitor className="w-4 h-4 text-purple-400" />
-              <span>@setuprizx Case Study</span>
+              <span>Featured Case Study</span>
             </button>
           </div>
         </div>
@@ -77,8 +77,8 @@ export default function Footer({ onOpenModal, onOpenCollab }) {
               <div className="p-3 rounded-xl bg-white/5 border border-purple-500/20 flex items-center gap-3">
                 <Monitor className="w-5 h-5 text-purple-400 flex-shrink-0" />
                 <div>
-                  <div className="font-bold text-white text-xs">Recent Collaboration</div>
-                  <div className="text-[11px] text-slate-400">Official Web Architect for <strong className="text-purple-300">@setuprizx</strong></div>
+                  <div className="font-bold text-white text-xs">Bespoke Creator Architecture</div>
+                  <div className="text-[11px] text-slate-400">Engineered for monetization and 6-figure sponsorships</div>
                 </div>
               </div>
             </div>
@@ -89,7 +89,7 @@ export default function Footer({ onOpenModal, onOpenCollab }) {
             <div className="font-bold text-white uppercase tracking-wider text-[11px]">Solutions</div>
             <ul className="space-y-2">
               <li><a href="#showcase" className="hover:text-purple-300 transition-colors">Creator Work Showcase</a></li>
-              <li><a href="#setuprizx" onClick={onOpenCollab} className="text-purple-300 hover:text-white transition-colors">@setuprizx Battlestation Hub</a></li>
+              <li><a href="#showcase" onClick={onOpenCollab} className="text-purple-300 hover:text-white transition-colors">Battlestation & Studio Hub</a></li>
               <li><a href="#services" className="hover:text-purple-300 transition-colors">Interactive Media Kits</a></li>
               <li><a href="#calculator" className="hover:text-purple-300 transition-colors">Ad Rate Calculator</a></li>
               <li><a href="#customizer" className="hover:text-purple-300 transition-colors">Shop The Setup Gear Racks</a></li>
@@ -147,7 +147,7 @@ export default function Footer({ onOpenModal, onOpenCollab }) {
           <div className="flex items-center gap-2">
             <span>© {new Date().getFullYear()} FORGECRAFT CREATOR SITES. All rights reserved.</span>
             <span>•</span>
-            <span>Proudly built in official collaboration with @setuprizx.</span>
+            <span>High-converting digital architecture for elite creators.</span>
           </div>
 
           <div className="flex items-center gap-4">

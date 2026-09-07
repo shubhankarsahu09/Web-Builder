@@ -1,24 +1,21 @@
 # FORGECRAFT CREATOR SITES 🚀
 > High-Converting Websites, Live Media Kits & Brand Advertising Portals for Creators  
-> **Featured Official Collaboration: @setuprizx**
 
 ## 🌟 Overview
 **FORGECRAFT CREATOR SITES** is an agency and web application platform designed to help content creators, streamers, and hardware curators showcase their creative work, own their audience, and dramatically increase brand sponsorship revenue.
-
-Recently, we teamed up in an official collaboration with **[@setuprizx](https://instagram.com/setuprizx)** (the premier desk setup & aesthetic battlestation curator) to engineer their ultimate digital showcase hub and sponsorship architecture.
 
 ---
 
 ## ⚡ Key Features
 
-### 1. Featured Collaboration: @setuprizx Showcase
-- **Hero & Announcement Bar**: Highlighted client partnership badge across top of the site.
+### 1. Featured Creator Showcase: Battlestation & Studio Hub
+- **Hero & Announcement Bar**: Highlighted client showcase across the site.
 - **Dedicated Case Study Deep-Dive**:
   - `+340%` increase in inbound sponsor deal conversions vs static PDFs.
   - `145K+` monthly organic reach.
   - `38+` active hardware brand partners (Razer, BenQ, Keychron, etc.).
 - **Interactive "Shop The Setup" Gear Rack**:
-  - Clickable hardware tags with verified discount codes (e.g., `SETUPRIZX15`) and tracked affiliate links.
+  - Clickable hardware tags with verified discount codes and tracked affiliate links.
 - **Live Media Kit & Rate Card**:
   - Transparent deliverable tiers ($1,800 to $9,500/quarter) for sponsors.
 - **Automated Brand Inquiry Funnel**:
@@ -26,7 +23,7 @@ Recently, we teamed up in an official collaboration with **[@setuprizx](https://
 
 ### 2. Interactive Creator Site Configurator / Simulator
 - Live customization simulator allowing creators to test layouts in real time:
-  - **Niches**: Battlestations & Hardware (like @setuprizx), Gaming & Esports, Filmmaking & Essays, Lifestyle & Tech.
+  - **Niches**: Battlestations & Hardware, Gaming & Esports, Filmmaking & Essays, Lifestyle & Tech.
   - **Themes**: Cyber Obsidian, Battlestation Matrix, Electric Cyan, Neon Amber.
   - **Modules**: Live Media Kit, Shop The Setup, Stream Sync, Brand Booking, Merch Store.
 
@@ -41,7 +38,7 @@ Recently, we teamed up in an official collaboration with **[@setuprizx](https://
 
 ### 5. Transparent Pricing & Creator Packages
 - **Starter Creator Hub** ($699)
-- **Pro Creator + Media Kit** ($1,399) - *Most Popular • As seen with @setuprizx*
+- **Pro Creator + Media Kit** ($1,399) - *Most Popular*
 - **Creator Empire & Agency** ($2,799)
 
 ### 6. Interactive Contact & Brand Consultation Modal

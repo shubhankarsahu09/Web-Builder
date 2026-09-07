@@ -19,12 +19,12 @@ export default function InteractiveBuilder({ onOpenModalWithConfig }) {
   const niches = [
     {
       id: 'setup',
-      name: 'Battlestations & Hardware (like @setuprizx)',
+      name: 'Battlestations & Hardware Portfolios',
       icon: Monitor,
       creatorTitle: 'Desk Aesthetics & Tech Curator',
       headline: 'The Ultimate Minimalist Battlestation & Workstation Hub',
       bannerImage: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=800&q=80',
-      sampleTag: 'Featured Partner: @setuprizx Collab Style'
+      sampleTag: 'Curated Studio Layout'
     },
     {
       id: 'gaming',
@@ -190,7 +190,7 @@ export default function InteractiveBuilder({ onOpenModalWithConfig }) {
                 >
                   <span className="flex items-center gap-2">
                     <Monitor className="w-4 h-4 text-cyan-400" />
-                    <span>Shop The Setup / Gear Rack (like @setuprizx)</span>
+                    <span>Shop The Setup / Gear Rack</span>
                   </span>
                   <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${modules.gearRack ? 'bg-cyan-500 text-white' : 'bg-white/10 text-slate-400'}`}>
                     {modules.gearRack ? 'ACTIVE' : 'OFF'}
@@ -345,7 +345,7 @@ export default function InteractiveBuilder({ onOpenModalWithConfig }) {
                         </div>
                         <div>
                           <div className="text-xs font-bold text-white">Shop The Setup & Hardware Rack</div>
-                          <div className="text-[11px] text-slate-400">Interactive gear tags with discount codes (like @setuprizx)</div>
+                          <div className="text-[11px] text-slate-400">Interactive gear tags with brand discount codes</div>
                         </div>
                       </div>
                       <span className="text-xs px-3 py-1 rounded-lg bg-cyan-600/40 text-cyan-200 border border-cyan-400/30 font-medium">
