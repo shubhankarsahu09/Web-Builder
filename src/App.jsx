@@ -22,6 +22,13 @@ const BASE_PRICES = {
   Premium: 936
 };
 
+// Anchor / list prices for visitors without a coupon
+const ANCHOR_PRICES = {
+  Basic: '300',
+  Standard: '500',
+  Premium: '1,000'
+};
+
 export default function App() {
   const [isMobile, setIsMobile] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -1682,14 +1689,28 @@ export default function App() {
                             )}
                           </div>
                           <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'baseline', gap: 6 }}>
-                            {pricing.isDiscounted && (
-                              <span style={{ textDecoration: 'line-through', color: '#94a3b8', fontSize: 14, fontWeight: 500 }}>
-                                {currSymbol}{pricing.original}
-                              </span>
+                            {pricing.isDiscounted ? (
+                              <>
+                                <span style={{ textDecoration: 'line-through', color: '#cbd5e1', fontSize: 12, fontWeight: 400 }}>
+                                  {currSymbol}300
+                                </span>
+                                <span style={{ textDecoration: 'line-through', color: '#94a3b8', fontSize: 14, fontWeight: 500 }}>
+                                  {currSymbol}{pricing.original}
+                                </span>
+                                <span style={{ fontWeight: 700, fontSize: 18, color: '#0891b2' }}>
+                                  {currSymbol}{pricing.discounted}
+                                </span>
+                              </>
+                            ) : (
+                              <>
+                                <span style={{ textDecoration: 'line-through', color: '#94a3b8', fontSize: 14, fontWeight: 500 }}>
+                                  {currSymbol}300
+                                </span>
+                                <span style={{ fontWeight: 700, fontSize: 17, color: '#15BCDF' }}>
+                                  {currSymbol}{pricing.original}
+                                </span>
+                              </>
                             )}
-                            <span style={{ fontWeight: 700, fontSize: 17, color: pricing.isDiscounted ? '#0891b2' : '#15BCDF' }}>
-                              {pricing.discounted === 0 ? 'FREE' : `${currSymbol}${pricing.discounted}`}
-                            </span>
                           </div>
                         </div>
                         {pricing.isDiscounted && (
@@ -1744,14 +1765,28 @@ export default function App() {
                             )}
                           </div>
                           <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'baseline', gap: 6 }}>
-                            {pricing.isDiscounted && (
-                              <span style={{ textDecoration: 'line-through', color: '#94a3b8', fontSize: 14, fontWeight: 500 }}>
-                                {currSymbol}{pricing.original}
-                              </span>
+                            {pricing.isDiscounted ? (
+                              <>
+                                <span style={{ textDecoration: 'line-through', color: '#cbd5e1', fontSize: 12, fontWeight: 400 }}>
+                                  {currSymbol}500
+                                </span>
+                                <span style={{ textDecoration: 'line-through', color: '#94a3b8', fontSize: 14, fontWeight: 500 }}>
+                                  {currSymbol}{pricing.original}
+                                </span>
+                                <span style={{ fontWeight: 700, fontSize: 18, color: '#0891b2' }}>
+                                  {currSymbol}{pricing.discounted}
+                                </span>
+                              </>
+                            ) : (
+                              <>
+                                <span style={{ textDecoration: 'line-through', color: '#94a3b8', fontSize: 14, fontWeight: 500 }}>
+                                  {currSymbol}500
+                                </span>
+                                <span style={{ fontWeight: 700, fontSize: 17, color: '#15BCDF' }}>
+                                  {currSymbol}{pricing.original}
+                                </span>
+                              </>
                             )}
-                            <span style={{ fontWeight: 700, fontSize: 17, color: pricing.isDiscounted ? '#0891b2' : '#15BCDF' }}>
-                              {pricing.discounted === 0 ? 'FREE' : `${currSymbol}${pricing.discounted}`}
-                            </span>
                           </div>
                         </div>
                         {pricing.isDiscounted && (
@@ -1806,14 +1841,28 @@ export default function App() {
                             )}
                           </div>
                           <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'baseline', gap: 6 }}>
-                            {pricing.isDiscounted && (
-                              <span style={{ textDecoration: 'line-through', color: '#94a3b8', fontSize: 14, fontWeight: 500 }}>
-                                {currSymbol}{pricing.original}
-                              </span>
+                            {pricing.isDiscounted ? (
+                              <>
+                                <span style={{ textDecoration: 'line-through', color: '#cbd5e1', fontSize: 12, fontWeight: 400 }}>
+                                  {currSymbol}1,000
+                                </span>
+                                <span style={{ textDecoration: 'line-through', color: '#94a3b8', fontSize: 14, fontWeight: 500 }}>
+                                  {currSymbol}{pricing.original}
+                                </span>
+                                <span style={{ fontWeight: 700, fontSize: 18, color: '#0891b2' }}>
+                                  {currSymbol}{pricing.discounted}
+                                </span>
+                              </>
+                            ) : (
+                              <>
+                                <span style={{ textDecoration: 'line-through', color: '#94a3b8', fontSize: 14, fontWeight: 500 }}>
+                                  {currSymbol}1,000
+                                </span>
+                                <span style={{ fontWeight: 700, fontSize: 17, color: '#15BCDF' }}>
+                                  {currSymbol}{pricing.original}
+                                </span>
+                              </>
                             )}
-                            <span style={{ fontWeight: 700, fontSize: 17, color: pricing.isDiscounted ? '#0891b2' : '#15BCDF' }}>
-                              {pricing.discounted === 0 ? 'FREE' : `${currSymbol}${pricing.discounted}`}
-                            </span>
                           </div>
                         </div>
                         {pricing.isDiscounted && (
