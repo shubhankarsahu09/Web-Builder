@@ -210,6 +210,33 @@ export default function App() {
     };
   };
 
+  const handleHeaderCtaClick = (e) => {
+    e.preventDefault();
+    if (currentPage === 'home') {
+      navigateTo('build');
+    } else {
+      const form = document.getElementById('build-inquiry-form');
+      if (form) {
+        if (!form.checkValidity()) {
+          form.reportValidity();
+          const firstInvalid = form.querySelector(':invalid');
+          if (firstInvalid) {
+            firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            firstInvalid.focus();
+          }
+        } else {
+          if (typeof form.requestSubmit === 'function') {
+            form.requestSubmit();
+          } else {
+            form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+          }
+        }
+      } else if (isSubmitted) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     confetti({
@@ -359,10 +386,10 @@ export default function App() {
               </a>
             </nav>
 
-            {/* Right-aligned "Start Build" button (desktop only) */}
+            {/* Right-aligned "Start Build" / "Submit Inquiry" button (desktop only) */}
             <a
               href="#/build"
-              onClick={(e) => { e.preventDefault(); navigateTo('build'); }}
+              onClick={handleHeaderCtaClick}
               className="chamfer-contact"
               onMouseEnter={() => setContactHover(true)}
               onMouseLeave={() => setContactHover(false)}
@@ -384,6 +411,7 @@ export default function App() {
                 textDecoration: 'none',
                 transition: 'all 0.2s ease',
                 cursor: 'pointer',
+                fontFamily: 'inherit',
                 backdropFilter: currentPage === 'home' ? 'blur(10px)' : 'none'
               }}
             >
@@ -1256,7 +1284,7 @@ export default function App() {
                 </div>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+              <form id="build-inquiry-form" onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
                 
                 {/* Full Name */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
