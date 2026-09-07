@@ -177,7 +177,7 @@ export default function App() {
         origin: { y: 0.6 }
       });
     } else {
-      setCouponError(`Coupon "${code}" is invalid. Try SETUPRIZX`);
+      setCouponError('Invalid coupon code. Please check and try again.');
     }
   };
 
@@ -598,84 +598,42 @@ export default function App() {
                   paddingBottom: 'min(clamp(36px, 6vw, 80px), 7vh)'
                 }}
               >
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 14 }}>
-                  <button
-                    className="chamfer-btn"
-                    onMouseEnter={() => setHeroCtaHover(true)}
-                    onMouseLeave={() => setHeroCtaHover(false)}
-                    onClick={() => navigateTo('build')}
+                <button
+                  className="chamfer-btn"
+                  onMouseEnter={() => setHeroCtaHover(true)}
+                  onMouseLeave={() => setHeroCtaHover(false)}
+                  onClick={() => navigateTo('build')}
+                  style={{
+                    background: heroCtaHover ? '#3fd0ef' : '#15BCDF',
+                    border: '1px solid #0fa3c2',
+                    color: '#1a1c1e',
+                    textTransform: 'uppercase',
+                    fontWeight: 700,
+                    letterSpacing: '0.14em',
+                    padding: '18px 34px',
+                    fontSize: 'clamp(13px, 2.2vw, 16px)',
+                    boxShadow: heroCtaHover
+                      ? '0 0 0 1px rgba(21,188,223,0.5), 0 14px 36px -8px rgba(15,163,194,0.85)'
+                      : '0 0 0 1px rgba(21,188,223,0.35), 0 10px 30px -12px rgba(15,163,194,0.6)',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 12,
+                    cursor: 'pointer',
+                    transition: 'background 0.2s ease, box-shadow 0.2s ease',
+                    fontFamily: 'inherit'
+                  }}
+                >
+                  <span>START YOUR BUILD</span>
+                  <span
                     style={{
-                      background: heroCtaHover ? '#3fd0ef' : '#15BCDF',
-                      border: '1px solid #0fa3c2',
-                      color: '#1a1c1e',
-                      textTransform: 'uppercase',
-                      fontWeight: 700,
-                      letterSpacing: '0.14em',
-                      padding: '18px 34px',
-                      fontSize: 'clamp(13px, 2.2vw, 16px)',
-                      boxShadow: heroCtaHover
-                        ? '0 0 0 1px rgba(21,188,223,0.5), 0 14px 36px -8px rgba(15,163,194,0.85)'
-                        : '0 0 0 1px rgba(21,188,223,0.35), 0 10px 30px -12px rgba(15,163,194,0.6)',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: 12,
-                      cursor: 'pointer',
-                      transition: 'background 0.2s ease, box-shadow 0.2s ease',
-                      fontFamily: 'inherit'
+                      display: 'inline-block',
+                      width: 22,
+                      height: 1,
+                      backgroundColor: '#1a1c1e',
+                      flexShrink: 0
                     }}
-                  >
-                    <span>START YOUR BUILD</span>
-                    <span
-                      style={{
-                        display: 'inline-block',
-                        width: 22,
-                        height: 1,
-                        backgroundColor: '#1a1c1e',
-                        flexShrink: 0
-                      }}
-                    />
-                  </button>
-
-                  {/* Promo Coupon Pill */}
-                  <div
-                    onClick={() => {
-                      handleApplyCoupon('SETUPRIZX');
-                      navigateTo('build');
-                    }}
-                    title="Click to apply SETUPRIZX for 20% OFF"
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: 8,
-                      padding: '6px 14px',
-                      backgroundColor: 'rgba(255, 255, 255, 0.85)',
-                      border: '1px solid rgba(21, 188, 223, 0.45)',
-                      boxShadow: '0 2px 10px rgba(0,0,0,0.04)',
-                      borderRadius: 20,
-                      cursor: 'pointer',
-                      backdropFilter: 'blur(8px)',
-                      transition: 'all 0.2s ease'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = '#ffffff';
-                      e.currentTarget.style.borderColor = '#15BCDF';
-                      e.currentTarget.style.transform = 'translateY(-1px)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.85)';
-                      e.currentTarget.style.borderColor = 'rgba(21, 188, 223, 0.45)';
-                      e.currentTarget.style.transform = 'translateY(0)';
-                    }}
-                  >
-                    <span style={{ fontSize: 13 }}>🏷️</span>
-                    <span style={{ fontSize: 12, fontWeight: 700, color: '#1a1c1e', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                      Coupon: <span style={{ color: '#0891b2', textDecoration: 'underline' }}>SETUPRIZX</span> for 20% OFF
-                    </span>
-                    <span style={{ fontSize: 11, backgroundColor: '#15BCDF', color: '#1a1c1e', padding: '1px 6px', borderRadius: 4, fontWeight: 700 }}>
-                      APPLY & BUILD →
-                    </span>
-                  </div>
-                </div>
+                  />
+                </button>
               </div>
             </div>
           </section>
@@ -1542,7 +1500,7 @@ export default function App() {
                       <div style={{ display: 'flex', gap: 8, alignItems: 'stretch' }}>
                         <input
                           type="text"
-                          placeholder="ENTER CODE (e.g. SETUPRIZX)"
+                          placeholder="ENTER PROMO / COUPON CODE"
                           value={couponInput}
                           onChange={(e) => {
                             setCouponInput(e.target.value.toUpperCase());
@@ -1604,34 +1562,6 @@ export default function App() {
                           ⚠️ {couponError}
                         </div>
                       )}
-
-                      {/* Quick Apply Suggestion */}
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 10, flexWrap: 'wrap' }}>
-                        <span style={{ fontSize: 11, color: '#64748b', textTransform: 'uppercase', fontWeight: 700 }}>
-                          Available Coupon:
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() => handleApplyCoupon('SETUPRIZX')}
-                          style={{
-                            background: '#ffffff',
-                            border: '1px solid #cbd5e1',
-                            borderRadius: 16,
-                            padding: '3px 10px',
-                            fontSize: 11,
-                            fontWeight: 700,
-                            color: '#0891b2',
-                            cursor: 'pointer',
-                            fontFamily: 'inherit',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: 4
-                          }}
-                        >
-                          <span>SETUPRIZX</span>
-                          <span style={{ color: '#15BCDF' }}>(20% OFF)</span>
-                        </button>
-                      </div>
                     </div>
                   )}
                 </div>
