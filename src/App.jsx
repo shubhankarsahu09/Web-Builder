@@ -5,14 +5,26 @@ import {
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
+const CURRENCY_SYMBOLS = {
+  INR: '₹',
+  USD: '$',
+  EUR: '€',
+  GBP: '£',
+  CAD: 'CA$',
+  AUD: 'A$',
+  AED: 'AED '
+};
+
 export default function App() {
   const [activeTab, setActiveTab] = useState('showcase'); // 'showcase' or 'advertising'
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [formData, setFormData] = useState({
-    handle: '',
-    contact: '',
-    creatorNiche: 'Tech & Desk Setups',
-    primaryGoal: 'Both (Showcase + Brand Deals)'
+    fullName: '',
+    email: '',
+    pagesNeeded: '',
+    websiteDetails: '',
+    currency: 'INR',
+    plan: 'Basic'
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -331,128 +343,181 @@ export default function App() {
 
         {/* The Star of the Page: Apple-Style Minimal Form */}
         <section id="creator-form" className="max-w-xl mx-auto space-y-4 scroll-mt-20">
-          <div className="text-center space-y-1 px-2">
-            <span className="text-xs font-semibold tracking-wider uppercase text-[#0071e3]">Get Started</span>
-            <h2 className="text-2xl sm:text-3xl font-bold text-[#1d1d1f] tracking-tight">
-              Request Your Creator Website
-            </h2>
-            <p className="text-xs sm:text-sm text-[#6e6e73]">
-              Fill out this simple form and we'll send you a custom concept within 24 hours.
-            </p>
-          </div>
-
-          <div className="bg-white p-5 sm:p-8 md:p-10 rounded-2xl sm:rounded-3xl border border-black/[0.08] shadow-[0_16px_48px_rgba(0,0,0,0.06)]">
+          <div className="bg-white p-6 sm:p-8 md:p-10 rounded-2xl sm:rounded-3xl border border-black/[0.08] shadow-[0_16px_48px_rgba(0,0,0,0.06)]">
             {isSubmitted ? (
               <div className="text-center py-6 sm:py-8 space-y-4">
                 <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#34c759]/10 text-[#34c759] flex items-center justify-center mx-auto">
                   <CheckCircle2 className="w-7 h-7 sm:w-8 sm:h-8" />
                 </div>
                 <div className="space-y-1">
-                  <h3 className="text-xl sm:text-2xl font-bold text-[#1d1d1f]">We received your details!</h3>
+                  <h3 className="text-xl sm:text-2xl font-bold text-[#1d1d1f]">Request Sent Successfully!</h3>
                   <p className="text-xs sm:text-sm text-[#6e6e73] max-w-sm mx-auto">
-                    We will review your channel and demographic metrics, and reply with a tailored concept within 24 hours.
+                    Thank you, {formData.fullName || 'there'}! We have received your request for the <strong>{formData.plan}</strong> plan and will reply to {formData.email || 'your email'} within 24 hours.
                   </p>
                 </div>
                 <button
                   onClick={() => setIsSubmitted(false)}
                   className="text-xs font-semibold text-[#0071e3] hover:underline pt-2 cursor-pointer"
                 >
-                  Submit another inquiry
+                  Submit another request
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
+              <form onSubmit={handleSubmit} className="space-y-5">
                 
-                {/* Handle / Name */}
+                {/* Full Name */}
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-[#1d1d1f] block">
-                    Your Name or Creator Handle
+                  <label className="text-xs sm:text-sm font-semibold text-[#1d1d1f] block">
+                    Full Name
                   </label>
                   <input 
                     type="text" 
                     required
-                    placeholder="@yourhandle or Alex"
-                    value={formData.handle}
-                    onChange={(e) => setFormData({ ...formData, handle: e.target.value })}
-                    className="w-full px-3.5 sm:px-4 py-3 rounded-xl bg-[#f5f5f7] border border-transparent focus:border-[#0071e3] focus:bg-white text-[#1d1d1f] text-base sm:text-sm outline-none transition-all placeholder-[#86868b]"
+                    placeholder="John Doe"
+                    value={formData.fullName}
+                    onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                    className="w-full px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-lg sm:rounded-xl border border-gray-200 bg-white text-sm text-[#1d1d1f] placeholder:text-gray-400 focus:outline-none focus:border-[#38bdf8] focus:ring-1 focus:ring-[#38bdf8] transition-all"
                   />
                 </div>
 
-                {/* Email / Instagram / Discord */}
+                {/* Email Address */}
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-[#1d1d1f] block">
-                    Contact Email or Social Link
+                  <label className="text-xs sm:text-sm font-semibold text-[#1d1d1f] block">
+                    Email Address
+                  </label>
+                  <input 
+                    type="email" 
+                    required
+                    placeholder="name@example.com"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    className="w-full px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-lg sm:rounded-xl border border-gray-200 bg-white text-sm text-[#1d1d1f] placeholder:text-gray-400 focus:outline-none focus:border-[#38bdf8] focus:ring-1 focus:ring-[#38bdf8] transition-all"
+                  />
+                </div>
+
+                {/* Which pages do you need? */}
+                <div className="space-y-1.5">
+                  <label className="text-xs sm:text-sm font-semibold text-[#1d1d1f] block">
+                    Which pages do you need?
                   </label>
                   <input 
                     type="text" 
-                    required
-                    placeholder="creator@email.com or @handle"
-                    value={formData.contact}
-                    onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
-                    className="w-full px-3.5 sm:px-4 py-3 rounded-xl bg-[#f5f5f7] border border-transparent focus:border-[#0071e3] focus:bg-white text-[#1d1d1f] text-base sm:text-sm outline-none transition-all placeholder-[#86868b]"
+                    placeholder="e.g. Home, Brand, Media Kit, Links..."
+                    value={formData.pagesNeeded}
+                    onChange={(e) => setFormData({ ...formData, pagesNeeded: e.target.value })}
+                    className="w-full px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-lg sm:rounded-xl border border-gray-200 bg-white text-sm text-[#1d1d1f] placeholder:text-gray-400 focus:outline-none focus:border-[#38bdf8] focus:ring-1 focus:ring-[#38bdf8] transition-all"
                   />
                 </div>
 
-                {/* Creator Niche */}
+                {/* Website Details (proper detailing, number of pages, etc.) */}
                 <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-[#1d1d1f] block">
-                    What do you create?
+                  <label className="text-xs sm:text-sm font-semibold text-[#1d1d1f] block">
+                    Website Details (proper detailing, number of pages, etc.)
+                  </label>
+                  <textarea 
+                    rows={4}
+                    placeholder="Describe your vision..."
+                    value={formData.websiteDetails}
+                    onChange={(e) => setFormData({ ...formData, websiteDetails: e.target.value })}
+                    className="w-full px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-lg sm:rounded-xl border border-gray-200 bg-white text-sm text-[#1d1d1f] placeholder:text-gray-400 focus:outline-none focus:border-[#38bdf8] focus:ring-1 focus:ring-[#38bdf8] transition-all resize-y"
+                  />
+                </div>
+
+                {/* Currency */}
+                <div className="space-y-1.5">
+                  <label className="text-xs sm:text-sm font-semibold text-[#1d1d1f] block">
+                    Currency
                   </label>
                   <select
-                    value={formData.creatorNiche}
-                    onChange={(e) => setFormData({ ...formData, creatorNiche: e.target.value })}
-                    className="w-full px-3.5 sm:px-4 py-3 rounded-xl bg-[#f5f5f7] border border-transparent focus:border-[#0071e3] focus:bg-white text-[#1d1d1f] text-base sm:text-sm outline-none transition-all cursor-pointer"
+                    value={formData.currency}
+                    onChange={(e) => setFormData({ ...formData, currency: e.target.value })}
+                    className="w-full px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-lg sm:rounded-xl border border-gray-200 bg-white text-sm text-[#1d1d1f] focus:outline-none focus:border-[#38bdf8] focus:ring-1 focus:ring-[#38bdf8] transition-all cursor-pointer"
                   >
-                    <option value="Tech & Desk Setups">Tech & Desk Setups</option>
-                    <option value="Gaming & Streaming (Twitch / YouTube)">Gaming & Streaming (Twitch / YouTube)</option>
-                    <option value="Cinematography & Video Production">Cinematography & Video Production</option>
-                    <option value="Lifestyle, Tech & Fashion">Lifestyle, Tech & Fashion</option>
-                    <option value="Brand Sponsor / Advertiser">Brand Sponsor / Advertiser</option>
+                    <option value="INR">INR</option>
+                    <option value="USD">USD</option>
+                    <option value="EUR">EUR</option>
+                    <option value="GBP">GBP</option>
+                    <option value="CAD">CAD</option>
+                    <option value="AUD">AUD</option>
+                    <option value="AED">AED</option>
                   </select>
                 </div>
 
-                {/* Primary Goal Pill Selector */}
-                <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-[#1d1d1f] block">
-                    Primary Goal
+                {/* Select a Plan */}
+                <div className="space-y-2.5 pt-1">
+                  <label className="text-xs sm:text-sm font-semibold text-[#1d1d1f] block">
+                    Select a Plan
                   </label>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                    {['Showcase Work', 'Brand Deals & Ads', 'Both'].map((goal) => (
-                      <button
-                        key={goal}
-                        type="button"
-                        onClick={() => setFormData({ ...formData, primaryGoal: goal })}
-                        className={`py-2.5 px-3 rounded-xl text-xs font-medium border transition-all cursor-pointer text-center min-h-[42px] flex items-center justify-center leading-tight active:scale-[0.98] ${
-                          formData.primaryGoal === goal
-                            ? 'bg-[#1d1d1f] text-white border-[#1d1d1f] shadow-sm'
-                            : 'bg-[#f5f5f7] text-[#6e6e73] border-transparent hover:text-[#1d1d1f]'
-                        }`}
-                      >
-                        {goal}
-                      </button>
-                    ))}
+
+                  {/* Basic */}
+                  <div
+                    onClick={() => setFormData({ ...formData, plan: 'Basic' })}
+                    className={`p-4 rounded-xl border transition-all cursor-pointer ${
+                      formData.plan === 'Basic'
+                        ? 'border-2 border-[#38bdf8] bg-white shadow-xs'
+                        : 'border border-gray-200 bg-white hover:border-gray-300'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-base text-[#1d1d1f]">Basic</span>
+                      <span className="font-bold text-base text-[#38bdf8]">
+                        {CURRENCY_SYMBOLS[formData.currency] || '₹'}199
+                      </span>
+                    </div>
+                    <p className="text-xs sm:text-sm text-gray-500 mt-1">
+                      2 pages: 1st contact form (customizable), 2nd media kit.
+                    </p>
+                  </div>
+
+                  {/* Standard */}
+                  <div
+                    onClick={() => setFormData({ ...formData, plan: 'Standard' })}
+                    className={`p-4 rounded-xl border transition-all cursor-pointer ${
+                      formData.plan === 'Standard'
+                        ? 'border-2 border-[#38bdf8] bg-white shadow-xs'
+                        : 'border border-gray-200 bg-white hover:border-gray-300'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-base text-[#1d1d1f]">Standard</span>
+                      <span className="font-bold text-base text-[#38bdf8]">
+                        {CURRENCY_SYMBOLS[formData.currency] || '₹'}399
+                      </span>
+                    </div>
+                    <p className="text-xs sm:text-sm text-gray-500 mt-1">
+                      4 pages: 1st contact form (customizable), 2nd Beacon Media Kit, 3rd & 4th anything you want (customizable).
+                    </p>
+                  </div>
+
+                  {/* Premium */}
+                  <div
+                    onClick={() => setFormData({ ...formData, plan: 'Premium' })}
+                    className={`p-4 rounded-xl border transition-all cursor-pointer ${
+                      formData.plan === 'Premium'
+                        ? 'border-2 border-[#38bdf8] bg-white shadow-xs'
+                        : 'border border-gray-200 bg-white hover:border-gray-300'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-base text-[#1d1d1f]">Premium</span>
+                      <span className="font-bold text-base text-[#38bdf8]">
+                        {CURRENCY_SYMBOLS[formData.currency] || '₹'}799
+                      </span>
+                    </div>
+                    <p className="text-xs sm:text-sm text-gray-500 mt-1">
+                      Any number of pages: contact page, media kit, and all customizable pages you want.
+                    </p>
                   </div>
                 </div>
 
-                {/* Submit Action */}
+                {/* Send Request Button */}
                 <div className="pt-2">
                   <button
                     type="submit"
-                    className="w-full py-3.5 rounded-full text-sm font-semibold bg-[#0071e3] hover:bg-[#0077ed] text-white transition-all shadow-md shadow-[#0071e3]/20 flex items-center justify-center gap-2 cursor-pointer group active:scale-[0.99]"
+                    className="w-full py-3.5 rounded-lg text-sm font-semibold bg-[#111827] hover:bg-black text-white transition-all shadow-sm flex items-center justify-center cursor-pointer active:scale-[0.99]"
                   >
-                    <span>Send Inquiry & Get Concept</span>
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                    Send Request
                   </button>
-                  
-                  <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mt-3 text-[11px] text-[#86868b] text-center">
-                    <span className="flex items-center gap-1">
-                      <Check className="w-3.5 h-3.5 text-[#34c759]" /> 24-hr turnaround
-                    </span>
-                    <span className="hidden sm:inline">•</span>
-                    <span className="flex items-center gap-1">
-                      <Check className="w-3.5 h-3.5 text-[#34c759]" /> Free wireframe preview
-                    </span>
-                  </div>
                 </div>
 
               </form>
