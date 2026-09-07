@@ -1,539 +1,590 @@
-import React, { useState } from 'react';
-import { 
-  ArrowRight, Check, CheckCircle2, ChevronRight, 
-  ExternalLink, Laptop, Menu, Monitor, Play, ShieldCheck, Sparkles, TrendingUp, X 
-} from 'lucide-react';
-import confetti from 'canvas-confetti';
-
-const CURRENCY_SYMBOLS = {
-  INR: '₹',
-  USD: '$',
-  EUR: '€',
-  GBP: '£',
-  CAD: 'CA$',
-  AUD: 'A$',
-  AED: 'AED '
-};
+import React, { useState, useEffect, useRef } from 'react';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('showcase'); // 'showcase' or 'advertising'
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    fullName: '',
-    email: '',
-    pagesNeeded: '',
-    websiteDetails: '',
-    currency: 'INR',
-    plan: 'Basic'
-  });
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [heroCtaHover, setHeroCtaHover] = useState(false);
+  const [aboutCtaHover, setAboutCtaHover] = useState(false);
+  const [contactHover, setContactHover] = useState(false);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    confetti({
-      particleCount: 85,
-      spread: 65,
-      origin: { y: 0.65 }
-    });
-    setIsSubmitted(true);
+  const heroVideoRef = useRef(null);
+  const aboutVideoRef = useRef(null);
+
+  // Mobile resize listener (700px breakpoint)
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 700);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Robust video autoplay retry logic
+  useEffect(() => {
+    const tryPlay = (videoEl) => {
+      if (videoEl) {
+        videoEl.muted = true;
+        videoEl.play().catch(() => {});
+      }
+    };
+
+    const playAllVideos = () => {
+      tryPlay(heroVideoRef.current);
+      tryPlay(aboutVideoRef.current);
+    };
+
+    playAllVideos();
+    const interval = setInterval(playAllVideos, 1000);
+
+    const handleFirstInteraction = () => {
+      playAllVideos();
+    };
+
+    document.addEventListener('click', handleFirstInteraction, { once: true });
+    document.addEventListener('touchstart', handleFirstInteraction, { once: true });
+
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener('click', handleFirstInteraction);
+      document.removeEventListener('touchstart', handleFirstInteraction);
+    };
+  }, []);
+
+  const scrollToAbout = (e) => {
+    e?.preventDefault();
+    setMenuOpen(false);
+    document.getElementById('about-section')?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const scrollToSection = (id) => {
-    setMobileMenuOpen(false);
-    if (id === 'home') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      return;
-    }
-    const elem = document.getElementById(id);
-    if (elem) {
-      elem.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  const scrollToForm = () => {
-    setMobileMenuOpen(false);
-    document.getElementById('creator-form')?.scrollIntoView({ behavior: 'smooth' });
+  const scrollToHero = (e) => {
+    e?.preventDefault();
+    setMenuOpen(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
-    <div className="min-h-screen bg-[#fbfbfd] text-[#1d1d1f] font-sans antialiased selection:bg-[#0071e3] selection:text-white">
+    <div style={{ backgroundColor: '#F2F1F0', color: '#6b6f72', minHeight: '100svh', overflowX: 'hidden' }}>
       
-      {/* Apple-style Translucent Blur Navbar */}
-      <header className="sticky top-0 z-50 apple-blur-nav border-b border-black/[0.06] transition-all">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-4">
-          
+      {/* ============================================================ */}
+      {/* SECTION 1 — HERO                                             */}
+      {/* ============================================================ */}
+      <section
+        style={{
+          minHeight: '100svh',
+          backgroundColor: '#F2F1F0',
+          overflow: 'hidden',
+          position: 'relative',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between'
+        }}
+      >
+        {/* Background Video */}
+        <video
+          ref={heroVideoRef}
+          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260823_050407_500d0339-ab28-41c1-9688-132a74a3b5aa.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          style={{
+            position: 'absolute',
+            pointerEvents: 'none',
+            objectFit: 'contain',
+            height: 'auto',
+            top: 0,
+            ...(isMobile
+              ? { left: '-12%', width: '119%' }
+              : { right: '-20%', width: '99%' }),
+            zIndex: 1
+          }}
+        />
+
+        {/* Desktop-only scrim overlay on the left 70% */}
+        {!isMobile && (
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '70%',
+              height: '100%',
+              background: 'linear-gradient(90deg, #F2F1F0 0%, #F2F1F0 55%, rgba(242,241,240,0.85) 78%, rgba(242,241,240,0) 100%)',
+              pointerEvents: 'none',
+              zIndex: 2
+            }}
+          />
+        )}
+
+        {/* Navbar */}
+        <header
+          style={{
+            position: 'relative',
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: 'clamp(20px, 5vw, 56px)',
+            padding: 'clamp(20px, 3vw, 38px) clamp(20px, 4vw, 48px) 0',
+            alignItems: 'center',
+            zIndex: 10
+          }}
+        >
           {/* Logo */}
-          <button 
-            onClick={() => scrollToSection('home')}
-            className="flex items-center gap-2 text-sm sm:text-base font-semibold tracking-tight text-[#1d1d1f] shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
+          <a
+            href="#"
+            onClick={scrollToHero}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 12,
+              textDecoration: 'none'
+            }}
           >
-            <div className="w-6 h-6 rounded-md bg-[#1d1d1f] text-white flex items-center justify-center text-xs font-bold shadow-xs">
-              F
+            {/* 38px dark circle containing a white 20x8px ellipse rotated -25° */}
+            <div
+              style={{
+                width: 38,
+                height: 38,
+                borderRadius: '50%',
+                backgroundColor: '#111111',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0
+              }}
+            >
+              <div
+                style={{
+                  width: 20,
+                  height: 8,
+                  borderRadius: '50%',
+                  backgroundColor: '#ffffff',
+                  transform: 'rotate(-25deg)'
+                }}
+              />
             </div>
-            <span>Forge Creator</span>
-          </button>
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-1 text-sm font-medium text-[#6e6e73]">
-            <button
-              onClick={() => scrollToSection('home')}
-              className="px-3 py-1.5 rounded-full hover:text-[#1d1d1f] hover:bg-black/[0.04] transition-all cursor-pointer"
+            {/* lowercase word "targo" */}
+            <span
+              style={{
+                fontSize: 'clamp(22px, 5vw, 30px)',
+                fontWeight: 400,
+                color: '#111111',
+                letterSpacing: '-0.5px'
+              }}
             >
-              Home
-            </button>
-            <button
-              onClick={() => scrollToSection('about')}
-              className="px-3 py-1.5 rounded-full hover:text-[#1d1d1f] hover:bg-black/[0.04] transition-all cursor-pointer"
-            >
-              About
-            </button>
-            <button
-              onClick={() => scrollToSection('collaborators')}
-              className="px-3 py-1.5 rounded-full hover:text-[#1d1d1f] hover:bg-black/[0.04] transition-all cursor-pointer"
-            >
-              Recent Collaborators
-            </button>
-          </nav>
+              targo
+            </span>
+          </a>
 
-          {/* Right Action & Mobile Hamburger */}
-          <div className="flex items-center gap-2.5">
-            <button
-              onClick={scrollToForm}
-              className="text-xs sm:text-sm font-medium px-4 py-1.5 sm:py-2 rounded-full bg-[#0071e3] hover:bg-[#0077ed] text-white transition-all cursor-pointer shadow-sm shadow-[#0071e3]/20 shrink-0 active:scale-95"
-            >
-              Start Build
-            </button>
+          {/* Desktop Nav Links */}
+          {!isMobile ? (
+            <>
+              <nav
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 34,
+                  whiteSpace: 'nowrap'
+                }}
+              >
+                <a
+                  href="#"
+                  onClick={scrollToHero}
+                  style={{
+                    fontWeight: 700,
+                    fontSize: 'clamp(12px, 2.4vw, 15px)',
+                    letterSpacing: '0.06em',
+                    color: '#3a3a3a',
+                    textDecoration: 'none'
+                  }}
+                >
+                  HOME
+                </a>
+                <a
+                  href="#about-section"
+                  onClick={scrollToAbout}
+                  style={{
+                    fontWeight: 700,
+                    fontSize: 'clamp(12px, 2.4vw, 15px)',
+                    letterSpacing: '0.06em',
+                    color: '#3a3a3a',
+                    textDecoration: 'none'
+                  }}
+                >
+                  ABOUT
+                </a>
+                <a
+                  href="#contact"
+                  style={{
+                    fontWeight: 700,
+                    fontSize: 'clamp(12px, 2.4vw, 15px)',
+                    letterSpacing: '0.06em',
+                    color: '#3a3a3a',
+                    textDecoration: 'none'
+                  }}
+                >
+                  CONTACT US
+                </a>
+              </nav>
 
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-1.5 rounded-lg text-[#1d1d1f] hover:bg-black/[0.05] transition-colors cursor-pointer"
-              aria-label="Toggle Navigation Menu"
+              {/* Right-aligned "Contact us" button (desktop only) */}
+              <a
+                href="#contact"
+                className="chamfer-contact"
+                onMouseEnter={() => setContactHover(true)}
+                onMouseLeave={() => setContactHover(false)}
+                style={{
+                  marginLeft: 'auto',
+                  background: contactHover ? 'rgba(255, 255, 255, 0.14)' : 'transparent',
+                  border: 'none',
+                  color: '#ffffff',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.14em',
+                  padding: '14px 26px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 10,
+                  fontSize: 'clamp(12px, 2vw, 14px)',
+                  fontWeight: 700,
+                  textDecoration: 'none',
+                  transition: 'background 0.2s ease',
+                  cursor: 'pointer'
+                }}
+              >
+                {/* White stroked mail-envelope SVG icon (17x13, stroke-width 1.4) */}
+                <svg
+                  width="17"
+                  height="13"
+                  viewBox="0 0 17 13"
+                  fill="none"
+                  stroke="#ffffff"
+                  strokeWidth="1.4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <rect x="0.7" y="0.7" width="15.6" height="11.6" rx="1.5" />
+                  <path d="M1.5 2L8.5 7.5L15.5 2" />
+                </svg>
+                <span>Contact us</span>
+              </a>
+            </>
+          ) : (
+            /* Mobile Hamburger Button */
+            <div style={{ marginLeft: 'auto' }}>
+              <button
+                onClick={() => setMenuOpen(!menuOpen)}
+                aria-label="Toggle navigation menu"
+                style={{
+                  background: 'rgba(17, 17, 17, 0.65)',
+                  backdropFilter: 'blur(8px)',
+                  border: 'none',
+                  padding: '10px 12px',
+                  borderRadius: 6,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: 5,
+                  cursor: 'pointer'
+                }}
+              >
+                {/* 3 white 22x2px bars, gap 5px */}
+                <span style={{ display: 'block', width: 22, height: 2, backgroundColor: '#ffffff' }} />
+                <span style={{ display: 'block', width: 22, height: 2, backgroundColor: '#ffffff' }} />
+                <span style={{ display: 'block', width: 22, height: 2, backgroundColor: '#ffffff' }} />
+              </button>
+            </div>
+          )}
+
+          {/* Mobile Stacked Menu */}
+          {isMobile && menuOpen && (
+            <div
+              style={{
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 18,
+                padding: '16px 20px',
+                marginTop: 10,
+                background: 'rgba(242, 241, 240, 0.95)',
+                backdropFilter: 'blur(12px)',
+                borderRadius: 8,
+                border: '1px solid rgba(0,0,0,0.06)',
+                boxShadow: '0 8px 24px rgba(0,0,0,0.06)'
+              }}
             >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              <a
+                href="#"
+                onClick={scrollToHero}
+                style={{
+                  color: '#1a1c1e',
+                  fontWeight: 700,
+                  fontSize: 16,
+                  letterSpacing: '0.06em',
+                  textDecoration: 'none'
+                }}
+              >
+                HOME
+              </a>
+              <a
+                href="#about-section"
+                onClick={scrollToAbout}
+                style={{
+                  color: '#1a1c1e',
+                  fontWeight: 700,
+                  fontSize: 16,
+                  letterSpacing: '0.06em',
+                  textDecoration: 'none'
+                }}
+              >
+                ABOUT
+              </a>
+              <a
+                href="#contact"
+                onClick={() => setMenuOpen(false)}
+                style={{
+                  color: '#1a1c1e',
+                  fontWeight: 700,
+                  fontSize: 16,
+                  letterSpacing: '0.06em',
+                  textDecoration: 'none'
+                }}
+              >
+                CONTACT US
+              </a>
+            </div>
+          )}
+        </header>
+
+        {/* Hero Headline & CTA Area */}
+        <div style={{ position: 'relative', zIndex: 3 }}>
+          {/* Headline (h1, 6 staircase lines, uppercase, weight 700) */}
+          <h1
+            style={{
+              margin: 0,
+              textTransform: 'uppercase',
+              fontWeight: 700,
+              letterSpacing: '0.01em',
+              lineHeight: 0.98,
+              color: '#2b3033',
+              ...(isMobile
+                ? {
+                    marginTop: 360,
+                    padding: '0 20px 28px 20px',
+                    fontSize: 'clamp(34px, 10vw, 56px)'
+                  }
+                : {
+                    padding: 'min(clamp(40px, 9vw, 120px), 9vh) 20px min(clamp(24px, 4vw, 44px), 5vh) clamp(20px, 9vw, 118px)',
+                    fontSize: 'min(clamp(34px, 7.6vw, 80px), 9.2vh)'
+                  })
+            }}
+          >
+            <div>SCALING</div>
+            <div>THE</div>
+            <div>PLATFORM</div>
+            <div style={{ marginLeft: 'min(238px, 28vw)' }}>FOR</div>
+            <div style={{ marginLeft: 'min(238px, 28vw)' }}>YOUR</div>
+            <div style={{ marginLeft: 'min(238px, 28vw)', color: '#15BCDF' }}>BUSINESS</div>
+          </h1>
+
+          {/* CTA button "GET STARTED" aligned with FOR/YOUR/BUSINESS indent */}
+          <div
+            style={{
+              paddingLeft: isMobile
+                ? 'calc(20px + min(238px, 28vw))'
+                : 'calc(clamp(20px, 9vw, 118px) + min(238px, 28vw))',
+              paddingBottom: 'min(clamp(36px, 6vw, 80px), 7vh)'
+            }}
+          >
+            <button
+              className="chamfer-btn"
+              onMouseEnter={() => setHeroCtaHover(true)}
+              onMouseLeave={() => setHeroCtaHover(false)}
+              onClick={scrollToAbout}
+              style={{
+                background: heroCtaHover ? '#3fd0ef' : '#15BCDF',
+                border: '1px solid #0fa3c2',
+                color: '#1a1c1e',
+                textTransform: 'uppercase',
+                fontWeight: 700,
+                letterSpacing: '0.14em',
+                padding: '18px 34px',
+                fontSize: 'clamp(13px, 2.2vw, 16px)',
+                boxShadow: heroCtaHover
+                  ? '0 0 0 1px rgba(21,188,223,0.5), 0 14px 36px -8px rgba(15,163,194,0.85)'
+                  : '0 0 0 1px rgba(21,188,223,0.35), 0 10px 30px -12px rgba(15,163,194,0.6)',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 12,
+                cursor: 'pointer',
+                transition: 'background 0.2s ease, box-shadow 0.2s ease',
+                fontFamily: 'inherit'
+              }}
+            >
+              <span>GET STARTED</span>
+              {/* Trailing 22x1px dark line */}
+              <span
+                style={{
+                  display: 'inline-block',
+                  width: 22,
+                  height: 1,
+                  backgroundColor: '#1a1c1e',
+                  flexShrink: 0
+                }}
+              />
             </button>
           </div>
         </div>
+      </section>
 
-        {/* Mobile Dropdown Navigation Menu */}
-        {mobileMenuOpen && (
-          <div className="md:hidden bg-white/95 backdrop-blur-md border-b border-black/[0.08] px-4 pt-3 pb-5 space-y-3 shadow-lg animate-in fade-in slide-in-from-top-2 duration-200">
-            <div className="flex flex-col space-y-1">
-              <button
-                onClick={() => scrollToSection('home')}
-                className="text-left px-3 py-2.5 rounded-xl text-sm font-medium text-[#1d1d1f] hover:bg-black/[0.04] transition-colors"
-              >
-                Home
-              </button>
-              <button
-                onClick={() => scrollToSection('about')}
-                className="text-left px-3 py-2.5 rounded-xl text-sm font-medium text-[#1d1d1f] hover:bg-black/[0.04] transition-colors"
-              >
-                About
-              </button>
-              <button
-                onClick={() => scrollToSection('collaborators')}
-                className="text-left px-3 py-2.5 rounded-xl text-sm font-medium text-[#1d1d1f] hover:bg-black/[0.04] transition-colors"
-              >
-                Recent Collaborators
-              </button>
+      {/* ============================================================ */}
+      {/* SECTION 2 — ABOUT                                            */}
+      {/* ============================================================ */}
+      <section
+        id="about-section"
+        style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          alignItems: 'center',
+          gap: 40,
+          background: 'linear-gradient(180deg, #F2F1F0 0%, #F7F6F8 18%, #F7F6F8 100%)',
+          padding: 'clamp(60px, 10vw, 140px) 0 clamp(30px, 5vw, 70px) clamp(20px, 9vw, 118px)',
+          overflow: 'hidden'
+        }}
+      >
+        {/* Left Column (flex 1 1 420px, min-width 300px) */}
+        <div
+          style={{
+            flex: '1 1 420px',
+            minWidth: 300,
+            paddingRight: isMobile ? 20 : 40
+          }}
+        >
+          {/* h2, two staircase lines: "ABOUT" then "BUSINESS" in #15BCDF indented by min(160px, 18vw) */}
+          <h2
+            style={{
+              margin: 0,
+              fontSize: 'clamp(34px, 6.5vw, 72px)',
+              fontWeight: 700,
+              textTransform: 'uppercase',
+              letterSpacing: '0.01em',
+              lineHeight: 0.98,
+              color: '#2b3033'
+            }}
+          >
+            <div>ABOUT</div>
+            <div style={{ marginLeft: 'min(160px, 18vw)', color: '#15BCDF' }}>
+              BUSINESS
             </div>
+          </h2>
 
-            <div className="pt-2 border-t border-black/[0.06]">
-              <button
-                onClick={scrollToForm}
-                className="w-full py-2.5 rounded-xl text-sm font-semibold bg-[#0071e3] hover:bg-[#0077ed] text-white transition-all shadow-sm shadow-[#0071e3]/25 flex items-center justify-center gap-2 cursor-pointer"
-              >
-                <span>Start Build</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-        )}
-      </header>
-
-      {/* Main Content */}
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 pt-10 sm:pt-16 pb-20 sm:pb-28 space-y-16 sm:space-y-24">
-        
-        {/* Apple-Style Hero */}
-        <section id="home" className="text-center max-w-3xl mx-auto space-y-5 sm:space-y-6 scroll-mt-20">
-          
-          {/* Eyebrow badge */}
-          <div className="inline-flex max-w-full items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-1 rounded-full text-[11px] sm:text-xs font-medium bg-[#f5f5f7] border border-black/[0.06] text-[#6e6e73] animate-gentle-float">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#0071e3] shrink-0" />
-            <span className="truncate">Websites & Media Portals for <strong className="text-[#1d1d1f]">Top Creators</strong></span>
-          </div>
-
-          {/* Main Headline */}
-          <div className="space-y-1.5 sm:space-y-2">
-            <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-[#1d1d1f] leading-[1.12] sm:leading-[1.08]">
-              Websites for creators.
-            </h1>
-            <p className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-[#86868b] leading-[1.14] sm:leading-[1.08]">
-              Showcase work. Close brand deals.
-            </p>
-          </div>
-
-          {/* Subtitle */}
-          <p className="text-sm sm:text-lg md:text-xl text-[#6e6e73] max-w-xl mx-auto font-normal leading-relaxed pt-1 sm:pt-2 px-2 sm:px-0">
-            We build bespoke digital portfolios and automated brand advertising hubs. Built and launched in 7 days.
+          {/* Paragraph (max-width 520px, margin 32px 0 0 min(160px, 18vw)) */}
+          <p
+            style={{
+              maxWidth: 520,
+              margin: '32px 0 0 min(160px, 18vw)',
+              fontSize: 'clamp(14px, 1.6vw, 17px)',
+              lineHeight: 1.7,
+              color: '#6b6f72'
+            }}
+          >
+            Targo builds the testing infrastructure modern teams rely on. From automated pipelines to full-scale QA audits, we make sure your software ships fast and breaks nothing. Hundreds of releases, zero surprises.
           </p>
 
-          {/* Actions */}
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2.5 sm:gap-3 pt-2 sm:pt-3 w-full sm:w-auto max-w-xs sm:max-w-none mx-auto">
+          {/* "LEARN MORE" button, identical style to the hero CTA */}
+          <div style={{ margin: '36px 0 0 min(160px, 18vw)' }}>
             <button
-              onClick={scrollToForm}
-              className="w-full sm:w-auto justify-center px-6 py-3 rounded-full text-sm font-medium bg-[#0071e3] hover:bg-[#0077ed] text-white transition-all shadow-md shadow-[#0071e3]/15 cursor-pointer flex items-center gap-2 group active:scale-[0.98]"
+              className="chamfer-btn"
+              onMouseEnter={() => setAboutCtaHover(true)}
+              onMouseLeave={() => setAboutCtaHover(false)}
+              style={{
+                background: aboutCtaHover ? '#3fd0ef' : '#15BCDF',
+                border: '1px solid #0fa3c2',
+                color: '#1a1c1e',
+                textTransform: 'uppercase',
+                fontWeight: 700,
+                letterSpacing: '0.14em',
+                padding: '18px 34px',
+                fontSize: 'clamp(13px, 2.2vw, 16px)',
+                boxShadow: aboutCtaHover
+                  ? '0 0 0 1px rgba(21,188,223,0.5), 0 14px 36px -8px rgba(15,163,194,0.85)'
+                  : '0 0 0 1px rgba(21,188,223,0.35), 0 10px 30px -12px rgba(15,163,194,0.6)',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 12,
+                cursor: 'pointer',
+                transition: 'background 0.2s ease, box-shadow 0.2s ease',
+                fontFamily: 'inherit'
+              }}
             >
-              <span>Build Your Website</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+              <span>LEARN MORE</span>
+              {/* Trailing 22x1px dark line */}
+              <span
+                style={{
+                  display: 'inline-block',
+                  width: 22,
+                  height: 1,
+                  backgroundColor: '#1a1c1e',
+                  flexShrink: 0
+                }}
+              />
             </button>
-
-            <a
-              href="#showcase"
-              className="w-full sm:w-auto justify-center px-6 py-3 rounded-full text-sm font-medium bg-[#f5f5f7] hover:bg-[#e8e8ed] text-[#1d1d1f] transition-all cursor-pointer flex items-center gap-1.5 active:scale-[0.98]"
-            >
-              <span>View Featured Showcase</span>
-              <ChevronRight className="w-4 h-4 text-[#86868b]" />
-            </a>
           </div>
-        </section>
-
-        {/* Featured Collaboration Card */}
-        <section id="collaborators" className="space-y-4 scroll-mt-20">
-          <div id="showcase" />
-          <div className="text-center space-y-1 pb-1 sm:pb-2">
-            <span className="text-xs font-semibold tracking-wider uppercase text-[#0071e3]">Featured Showcase</span>
-            <h2 className="text-2xl sm:text-3xl font-bold text-[#1d1d1f] tracking-tight">
-              Curated Battlestation & Studio Hub
-            </h2>
-          </div>
-
-          <div className="bg-white rounded-2xl sm:rounded-3xl border border-black/[0.08] shadow-[0_12px_44px_rgba(0,0,0,0.04)] overflow-hidden transition-all">
-            
-            {/* Top Toolbar / Segmented Control */}
-            <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-black/[0.06] bg-[#fbfbfd] flex flex-col sm:flex-row items-center justify-between gap-3">
-              <div className="flex items-center gap-3 w-full sm:w-auto">
-                <div className="w-9 h-9 rounded-full overflow-hidden border border-black/10 shrink-0">
-                  <img 
-                    src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=150&q=80" 
-                    alt="creator avatar" 
-                    className="w-full h-full object-cover" 
-                  />
-                </div>
-                <div>
-                  <div className="text-xs font-bold text-[#1d1d1f]">studiocraft.space</div>
-                  <div className="text-[11px] text-[#86868b]">Desk Aesthetics & Hardware Curation</div>
-                </div>
-              </div>
-
-              {/* iOS-style Segmented Control */}
-              <div className="w-full sm:w-auto bg-[#eeeeee] p-1 rounded-full flex items-center text-xs font-medium">
-                <button
-                  onClick={() => setActiveTab('showcase')}
-                  className={`flex-1 sm:flex-initial text-center px-3 sm:px-4 py-1.5 rounded-full transition-all cursor-pointer ${
-                    activeTab === 'showcase' 
-                      ? 'bg-white text-[#1d1d1f] shadow-sm font-semibold' 
-                      : 'text-[#6e6e73] hover:text-[#1d1d1f]'
-                  }`}
-                >
-                  Work Showcase
-                </button>
-                <button
-                  onClick={() => setActiveTab('advertising')}
-                  className={`flex-1 sm:flex-initial text-center px-3 sm:px-4 py-1.5 rounded-full transition-all cursor-pointer ${
-                    activeTab === 'advertising' 
-                      ? 'bg-white text-[#1d1d1f] shadow-sm font-semibold' 
-                      : 'text-[#6e6e73] hover:text-[#1d1d1f]'
-                  }`}
-                >
-                  Advertising Hub
-                </button>
-              </div>
-            </div>
-
-            {/* Content Display */}
-            {activeTab === 'showcase' ? (
-              <div className="p-4 sm:p-6 md:p-10 grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-center">
-                <div className="md:col-span-7 relative rounded-xl sm:rounded-2xl overflow-hidden border border-black/5 shadow-sm group">
-                  <img 
-                    src="https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=900&q=80" 
-                    alt="Battlestation showcase" 
-                    className="w-full h-52 xs:h-64 sm:h-72 md:h-80 object-cover transform group-hover:scale-102 transition-transform duration-500" 
-                  />
-                  <div className="absolute bottom-2.5 left-2.5 sm:bottom-3 sm:left-3 bg-black/60 backdrop-blur-md px-2.5 sm:px-3 py-1 rounded-full text-white text-[11px] sm:text-xs font-medium flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[#0071e3]" />
-                    <span>Curated Battlestation Showcase</span>
-                  </div>
-                </div>
-
-                <div className="md:col-span-5 space-y-3 sm:space-y-4">
-                  <div className="space-y-0.5 sm:space-y-1">
-                    <span className="text-xs font-semibold text-[#86868b] uppercase tracking-wider">Client Results</span>
-                    <div className="text-3xl sm:text-4xl font-extrabold text-[#1d1d1f] tracking-tight">+340%</div>
-                    <p className="text-xs text-[#6e6e73]">Inbound sponsor conversion increase after launch</p>
-                  </div>
-
-                  <blockquote className="text-xs sm:text-sm text-[#424245] italic leading-relaxed border-l-2 border-[#0071e3] pl-3">
-                    "Before this, we pitched brands with PDFs. Now, brands immediately treat us like an elite creative agency."
-                  </blockquote>
-                  
-                  <div className="text-xs font-medium text-[#1d1d1f]">
-                    — Studio Curator <span className="text-[#86868b] font-normal">• Verified Client</span>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div className="p-4 sm:p-6 md:p-10 space-y-4 sm:space-y-6">
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-                  <div className="p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-[#f5f5f7] border border-black/[0.04] space-y-1 text-center">
-                    <div className="text-xs text-[#86868b]">Monthly Reach</div>
-                    <div className="text-xl sm:text-2xl font-bold text-[#1d1d1f]">145,000+</div>
-                    <div className="text-[11px] text-[#34c759] font-medium">Verified Audience</div>
-                  </div>
-                  <div className="p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-[#f5f5f7] border border-black/[0.04] space-y-1 text-center">
-                    <div className="text-xs text-[#86868b]">Average Deal</div>
-                    <div className="text-xl sm:text-2xl font-bold text-[#0071e3]">$4,800</div>
-                    <div className="text-[11px] text-[#6e6e73]">Up from $1,200</div>
-                  </div>
-                  <div className="p-4 sm:p-5 rounded-xl sm:rounded-2xl bg-[#f5f5f7] border border-black/[0.04] space-y-1 text-center">
-                    <div className="text-xs text-[#86868b]">Brand Inquiries</div>
-                    <div className="text-xl sm:text-2xl font-bold text-[#1d1d1f]">Automated</div>
-                    <div className="text-[11px] text-[#6e6e73]">Filtered by budget</div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-          </div>
-        </section>
-
-        {/* 3 Clean Apple Bento Features */}
-        <section id="about" className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 scroll-mt-20">
-          <div className="bg-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl border border-black/[0.06] shadow-[0_4px_24px_rgba(0,0,0,0.03)] space-y-2.5 sm:space-y-3">
-            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-[#f5f5f7] flex items-center justify-center text-xs sm:text-sm font-semibold text-[#1d1d1f]">
-              01
-            </div>
-            <h3 className="text-base sm:text-lg font-bold text-[#1d1d1f] tracking-tight">Showcase Your Work.</h3>
-            <p className="text-xs sm:text-sm text-[#6e6e73] leading-relaxed">
-              4K visual galleries for videos, battlestations, and gear without algorithmic compression or ads.
-            </p>
-          </div>
-
-          <div className="bg-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl border border-black/[0.06] shadow-[0_4px_24px_rgba(0,0,0,0.03)] space-y-2.5 sm:space-y-3">
-            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-[#f5f5f7] flex items-center justify-center text-xs sm:text-sm font-semibold text-[#0071e3]">
-              02
-            </div>
-            <h3 className="text-base sm:text-lg font-bold text-[#1d1d1f] tracking-tight">Close Brand Sponsors.</h3>
-            <p className="text-xs sm:text-sm text-[#6e6e73] leading-relaxed">
-              Live media kit and automated inquiry gate that filters out lowballers and closes 4-to-5 figure deals.
-            </p>
-          </div>
-
-          <div className="bg-white p-5 sm:p-8 rounded-2xl sm:rounded-3xl border border-black/[0.06] shadow-[0_4px_24px_rgba(0,0,0,0.03)] space-y-2.5 sm:space-y-3">
-            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-[#f5f5f7] flex items-center justify-center text-xs sm:text-sm font-semibold text-[#34c759]">
-              03
-            </div>
-            <h3 className="text-base sm:text-lg font-bold text-[#1d1d1f] tracking-tight">Launched in 7 Days.</h3>
-            <p className="text-xs sm:text-sm text-[#6e6e73] leading-relaxed">
-              Zero coding. We handle design, high-speed hosting, custom domain connection, and mobile polish.
-            </p>
-          </div>
-        </section>
-
-        {/* The Star of the Page: Apple-Style Minimal Form */}
-        <section id="creator-form" className="max-w-xl mx-auto space-y-4 scroll-mt-20">
-          <div className="bg-white p-6 sm:p-8 md:p-10 rounded-2xl sm:rounded-3xl border border-black/[0.08] shadow-[0_16px_48px_rgba(0,0,0,0.06)]">
-            {isSubmitted ? (
-              <div className="text-center py-6 sm:py-8 space-y-4">
-                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#34c759]/10 text-[#34c759] flex items-center justify-center mx-auto">
-                  <CheckCircle2 className="w-7 h-7 sm:w-8 sm:h-8" />
-                </div>
-                <div className="space-y-1">
-                  <h3 className="text-xl sm:text-2xl font-bold text-[#1d1d1f]">Request Sent Successfully!</h3>
-                  <p className="text-xs sm:text-sm text-[#6e6e73] max-w-sm mx-auto">
-                    Thank you, {formData.fullName || 'there'}! We have received your request for the <strong>{formData.plan}</strong> plan and will reply to {formData.email || 'your email'} within 24 hours.
-                  </p>
-                </div>
-                <button
-                  onClick={() => setIsSubmitted(false)}
-                  className="text-xs font-semibold text-[#0071e3] hover:underline pt-2 cursor-pointer"
-                >
-                  Submit another request
-                </button>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-5">
-                
-                {/* Full Name */}
-                <div className="space-y-1.5">
-                  <label className="text-xs sm:text-sm font-semibold text-[#1d1d1f] block">
-                    Full Name
-                  </label>
-                  <input 
-                    type="text" 
-                    required
-                    placeholder="John Doe"
-                    value={formData.fullName}
-                    onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                    className="w-full px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-lg sm:rounded-xl border border-gray-200 bg-white text-sm text-[#1d1d1f] placeholder:text-gray-400 focus:outline-none focus:border-[#38bdf8] focus:ring-1 focus:ring-[#38bdf8] transition-all"
-                  />
-                </div>
-
-                {/* Email Address */}
-                <div className="space-y-1.5">
-                  <label className="text-xs sm:text-sm font-semibold text-[#1d1d1f] block">
-                    Email Address
-                  </label>
-                  <input 
-                    type="email" 
-                    required
-                    placeholder="name@example.com"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-lg sm:rounded-xl border border-gray-200 bg-white text-sm text-[#1d1d1f] placeholder:text-gray-400 focus:outline-none focus:border-[#38bdf8] focus:ring-1 focus:ring-[#38bdf8] transition-all"
-                  />
-                </div>
-
-                {/* Which pages do you need? */}
-                <div className="space-y-1.5">
-                  <label className="text-xs sm:text-sm font-semibold text-[#1d1d1f] block">
-                    Which pages do you need?
-                  </label>
-                  <input 
-                    type="text" 
-                    placeholder="e.g. Home, Brand, Media Kit, Links..."
-                    value={formData.pagesNeeded}
-                    onChange={(e) => setFormData({ ...formData, pagesNeeded: e.target.value })}
-                    className="w-full px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-lg sm:rounded-xl border border-gray-200 bg-white text-sm text-[#1d1d1f] placeholder:text-gray-400 focus:outline-none focus:border-[#38bdf8] focus:ring-1 focus:ring-[#38bdf8] transition-all"
-                  />
-                </div>
-
-                {/* Website Details (proper detailing, number of pages, etc.) */}
-                <div className="space-y-1.5">
-                  <label className="text-xs sm:text-sm font-semibold text-[#1d1d1f] block">
-                    Website Details (proper detailing, number of pages, etc.)
-                  </label>
-                  <textarea 
-                    rows={4}
-                    placeholder="Describe your vision..."
-                    value={formData.websiteDetails}
-                    onChange={(e) => setFormData({ ...formData, websiteDetails: e.target.value })}
-                    className="w-full px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-lg sm:rounded-xl border border-gray-200 bg-white text-sm text-[#1d1d1f] placeholder:text-gray-400 focus:outline-none focus:border-[#38bdf8] focus:ring-1 focus:ring-[#38bdf8] transition-all resize-y"
-                  />
-                </div>
-
-                {/* Currency */}
-                <div className="space-y-1.5">
-                  <label className="text-xs sm:text-sm font-semibold text-[#1d1d1f] block">
-                    Currency
-                  </label>
-                  <select
-                    value={formData.currency}
-                    onChange={(e) => setFormData({ ...formData, currency: e.target.value })}
-                    className="w-full px-3.5 sm:px-4 py-2.5 sm:py-3 rounded-lg sm:rounded-xl border border-gray-200 bg-white text-sm text-[#1d1d1f] focus:outline-none focus:border-[#38bdf8] focus:ring-1 focus:ring-[#38bdf8] transition-all cursor-pointer"
-                  >
-                    <option value="INR">INR</option>
-                    <option value="USD">USD</option>
-                    <option value="EUR">EUR</option>
-                    <option value="GBP">GBP</option>
-                    <option value="CAD">CAD</option>
-                    <option value="AUD">AUD</option>
-                    <option value="AED">AED</option>
-                  </select>
-                </div>
-
-                {/* Select a Plan */}
-                <div className="space-y-2.5 pt-1">
-                  <label className="text-xs sm:text-sm font-semibold text-[#1d1d1f] block">
-                    Select a Plan
-                  </label>
-
-                  {/* Basic */}
-                  <div
-                    onClick={() => setFormData({ ...formData, plan: 'Basic' })}
-                    className={`p-4 rounded-xl border transition-all cursor-pointer ${
-                      formData.plan === 'Basic'
-                        ? 'border-2 border-[#38bdf8] bg-white shadow-xs'
-                        : 'border border-gray-200 bg-white hover:border-gray-300'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold text-base text-[#1d1d1f]">Basic</span>
-                      <span className="font-bold text-base text-[#38bdf8]">
-                        {CURRENCY_SYMBOLS[formData.currency] || '₹'}199
-                      </span>
-                    </div>
-                    <p className="text-xs sm:text-sm text-gray-500 mt-1">
-                      2 pages: 1st contact form (customizable), 2nd media kit.
-                    </p>
-                  </div>
-
-                  {/* Standard */}
-                  <div
-                    onClick={() => setFormData({ ...formData, plan: 'Standard' })}
-                    className={`p-4 rounded-xl border transition-all cursor-pointer ${
-                      formData.plan === 'Standard'
-                        ? 'border-2 border-[#38bdf8] bg-white shadow-xs'
-                        : 'border border-gray-200 bg-white hover:border-gray-300'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold text-base text-[#1d1d1f]">Standard</span>
-                      <span className="font-bold text-base text-[#38bdf8]">
-                        {CURRENCY_SYMBOLS[formData.currency] || '₹'}399
-                      </span>
-                    </div>
-                    <p className="text-xs sm:text-sm text-gray-500 mt-1">
-                      4 pages: 1st contact form (customizable), 2nd Beacon Media Kit, 3rd & 4th anything you want (customizable).
-                    </p>
-                  </div>
-
-                  {/* Premium */}
-                  <div
-                    onClick={() => setFormData({ ...formData, plan: 'Premium' })}
-                    className={`p-4 rounded-xl border transition-all cursor-pointer ${
-                      formData.plan === 'Premium'
-                        ? 'border-2 border-[#38bdf8] bg-white shadow-xs'
-                        : 'border border-gray-200 bg-white hover:border-gray-300'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold text-base text-[#1d1d1f]">Premium</span>
-                      <span className="font-bold text-base text-[#38bdf8]">
-                        {CURRENCY_SYMBOLS[formData.currency] || '₹'}799
-                      </span>
-                    </div>
-                    <p className="text-xs sm:text-sm text-gray-500 mt-1">
-                      Any number of pages: contact page, media kit, and all customizable pages you want.
-                    </p>
-                  </div>
-                </div>
-
-                {/* Send Request Button */}
-                <div className="pt-2">
-                  <button
-                    type="submit"
-                    className="w-full py-3.5 rounded-lg text-sm font-semibold bg-[#111827] hover:bg-black text-white transition-all shadow-sm flex items-center justify-center cursor-pointer active:scale-[0.99]"
-                  >
-                    Send Request
-                  </button>
-                </div>
-
-              </form>
-            )}
-          </div>
-        </section>
-
-      </main>
-
-      {/* Apple-Style Minimal Footer */}
-      <footer className="border-t border-black/[0.06] bg-[#f5f5f7] py-6 sm:py-8 text-center text-xs text-[#86868b]">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 space-y-2">
-          <p>© {new Date().getFullYear()} Forge Creator Sites. All rights reserved.</p>
-          <p>Bespoke digital portfolios and automated brand advertising hubs.</p>
         </div>
-      </footer>
+
+        {/* Right Column (flex 1 1 360px, min-width 280px, justify-content flex-end, position relative) */}
+        <div
+          style={{
+            flex: '1 1 360px',
+            minWidth: 280,
+            display: 'flex',
+            justifyContent: 'flex-end',
+            position: 'relative'
+          }}
+        >
+          {/* Video Container flush to right screen edge */}
+          <div
+            style={{
+              position: 'relative',
+              width: '100%',
+              maxWidth: 644
+            }}
+          >
+            {/* Video */}
+            <video
+              ref={aboutVideoRef}
+              src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260823_063501_2e2c8971-de1e-473a-8611-a0c9ae7ee186.mp4"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+              style={{
+                width: '100%',
+                maxWidth: 644,
+                height: 'auto',
+                display: 'block'
+              }}
+            />
+
+            {/* Overlay rectangle exactly covering the video (#15BCDF with mix-blend-mode: hue) */}
+            <div
+              style={{
+                position: 'absolute',
+                top: 0,
+                right: 0,
+                width: '100%',
+                maxWidth: 644,
+                height: '100%',
+                background: '#15BCDF',
+                mixBlendMode: 'hue',
+                pointerEvents: 'none',
+                zIndex: 1
+              }}
+            />
+          </div>
+        </div>
+      </section>
 
     </div>
   );
