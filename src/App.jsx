@@ -317,8 +317,30 @@ export default function App() {
     setIsSubmitted(true);
   };
 
-  const handleSupportSubmit = (e) => {
+  const handleSupportSubmit = async (e) => {
     e.preventDefault();
+
+    const payload = {
+      access_key: 'c1a7ebc7-2a5a-4e9e-b1b4-ec27f93bdc74',
+      name: supportData.creatorName,
+      email: supportData.email,
+      message: `Issue Category: ${supportData.issueCategory}\nPriority: ${supportData.priority}\n\n${supportData.message}`
+    };
+
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (!data.success) {
+        console.error('Web3Forms error:', data);
+      }
+    } catch (err) {
+      console.error('Support form submission failed:', err);
+    }
+
     confetti({
       particleCount: 75,
       spread: 60,
