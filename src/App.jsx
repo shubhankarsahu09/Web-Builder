@@ -297,14 +297,44 @@ export default function App() {
     setCouponError('');
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const pricing = getPlanPrice(formData.plan, formData.currency);
+
+    const payload = {
+      access_key: 'c7878074-5971-48f3-ac70-4508339ef9c5',
+      name: formData.fullName,
+      email: formData.email,
+      message: [
+        `Plan: ${formData.plan}`,
+        `Currency: ${formData.currency}`,
+        `Final Price: ${pricing.formattedDiscounted}`,
+        appliedCoupon ? `Coupon Applied: ${appliedCoupon.code} (${appliedCoupon.discountPercent}% OFF)` : 'Coupon: None',
+        `Pages Needed: ${formData.pagesNeeded || 'Not specified'}`,
+        `Website Details:\n${formData.websiteDetails || 'Not specified'}`
+      ].join('\n')
+    };
+
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (!data.success) {
+        console.error('Web3Forms error:', data);
+      }
+    } catch (err) {
+      console.error('Build form submission failed:', err);
+    }
+
     confetti({
       particleCount: 90,
       spread: 70,
       origin: { y: 0.65 }
     });
-    const pricing = getPlanPrice(formData.plan, formData.currency);
     setSubmittedBuildSummary({
       fullName: formData.fullName,
       email: formData.email,
