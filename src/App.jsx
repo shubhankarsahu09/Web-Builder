@@ -301,18 +301,41 @@ export default function App() {
     e.preventDefault();
 
     const pricing = getPlanPrice(formData.plan, formData.currency);
+    const now = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'full', timeStyle: 'short' });
 
     const payload = {
       access_key: 'c7878074-5971-48f3-ac70-4508339ef9c5',
+      subject: `🚀 New Website Build Request — ${formData.plan} Plan — ${formData.fullName}`,
       name: formData.fullName,
       email: formData.email,
       message: [
-        `Plan: ${formData.plan}`,
-        `Currency: ${formData.currency}`,
-        `Final Price: ${pricing.formattedDiscounted}`,
-        appliedCoupon ? `Coupon Applied: ${appliedCoupon.code} (${appliedCoupon.discountPercent}% OFF)` : 'Coupon: None',
-        `Pages Needed: ${formData.pagesNeeded || 'Not specified'}`,
-        `Website Details:\n${formData.websiteDetails || 'Not specified'}`
+        '============================================================',
+        '   NEW WEBSITE BUILD INQUIRY — FORGE CREATOR SITES',
+        '============================================================',
+        '',
+        '👤  CLIENT DETAILS',
+        `    Name        : ${formData.fullName}`,
+        `    Email       : ${formData.email}`,
+        '',
+        '📦  PLAN & PRICING',
+        `    Plan        : ${formData.plan}`,
+        `    Currency    : ${formData.currency}`,
+        `    Base Price  : ${pricing.formattedOriginal}`,
+        `    Final Price : ${pricing.formattedDiscounted}${pricing.isDiscounted ? ` (after ${pricing.percent}% discount)` : ''}`,
+        appliedCoupon
+          ? `    Coupon      : ${appliedCoupon.code} — ${appliedCoupon.discountPercent}% OFF — Savings: ${pricing.savingsText}`
+          : '    Coupon      : None applied',
+        '',
+        '🖥️  PROJECT DETAILS',
+        `    Pages Needed: ${formData.pagesNeeded || 'Not specified'}`,
+        '',
+        '    Website Brief:',
+        `    ${(formData.websiteDetails || 'Not specified').split('\n').join('\n    ')}`,
+        '',
+        '------------------------------------------------------------',
+        `    Submitted   : ${now} (IST)`,
+        '    Source      : Forge Creator Sites — Build Inquiry Form',
+        '============================================================'
       ].join('\n')
     };
 
@@ -350,11 +373,35 @@ export default function App() {
   const handleSupportSubmit = async (e) => {
     e.preventDefault();
 
+    const now = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'full', timeStyle: 'short' });
+    const priorityFlag = supportData.priority === 'Urgent ⚡' ? '🔴 URGENT' : supportData.priority === 'High' ? '🟠 HIGH' : '🟢 NORMAL';
+
     const payload = {
       access_key: 'c1a7ebc7-2a5a-4e9e-b1b4-ec27f93bdc74',
+      subject: `[${priorityFlag}] Creator Support Request — ${supportData.issueCategory} — ${supportData.creatorName}`,
       name: supportData.creatorName,
       email: supportData.email,
-      message: `Issue Category: ${supportData.issueCategory}\nPriority: ${supportData.priority}\n\n${supportData.message}`
+      message: [
+        '============================================================',
+        '   CREATOR SUPPORT TICKET — FORGE CREATOR SITES',
+        '============================================================',
+        '',
+        '👤  CREATOR DETAILS',
+        `    Name / Handle : ${supportData.creatorName}`,
+        `    Email         : ${supportData.email}`,
+        '',
+        '🎫  TICKET INFO',
+        `    Category      : ${supportData.issueCategory}`,
+        `    Priority      : ${priorityFlag}`,
+        '',
+        '📝  MESSAGE / DESCRIPTION',
+        `    ${(supportData.message || 'No message provided').split('\n').join('\n    ')}`,
+        '',
+        '------------------------------------------------------------',
+        `    Submitted     : ${now} (IST)`,
+        '    Source        : Forge Creator Sites — Creator Support Form',
+        '============================================================'
+      ].join('\n')
     };
 
     try {
