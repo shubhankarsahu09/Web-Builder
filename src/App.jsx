@@ -11,6 +11,21 @@ const CURRENCY_SYMBOLS = {
   AED: 'AED '
 };
 
+// Available coupons with their discount percentages
+const COUPONS = {
+  'CREATOR20': { discountPercent: 20, label: '20% Creator Discount' },
+  'FORGE20': { discountPercent: 20, label: '20% Early Bird Discount' },
+  'LAUNCH50': { discountPercent: 50, label: '50% Launch Special Discount' },
+  'VIP100': { discountPercent: 100, label: '100% Free VIP Access' },
+  'SAVE10': { discountPercent: 10, label: '10% Welcome Discount' }
+};
+
+const BASE_PRICES = {
+  Basic: 199,
+  Standard: 399,
+  Premium: 799
+};
+
 export default function App() {
   const [isMobile, setIsMobile] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -19,6 +34,12 @@ export default function App() {
   const [contactHover, setContactHover] = useState(false);
   const [submitHover, setSubmitHover] = useState(false);
   const [backHover, setBackHover] = useState(false);
+
+  // Coupon / Promo Code State
+  const [couponInput, setCouponInput] = useState('');
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [couponError, setCouponError] = useState('');
+  const [couponSuccessAnim, setCouponSuccessAnim] = useState(false);
 
   // Page Routing State ('home' or 'build')
   const [currentPage, setCurrentPage] = useState(() => {
@@ -133,6 +154,58 @@ export default function App() {
       document.removeEventListener('touchstart', handleFirstInteraction);
     };
   }, [currentPage]);
+
+  // Coupon management functions
+  const handleApplyCoupon = (codeToApply) => {
+    const code = (typeof codeToApply === 'string' ? codeToApply : couponInput).trim().toUpperCase();
+    if (!code) {
+      setCouponError('Please enter a coupon code.');
+      return;
+    }
+    if (COUPONS[code]) {
+      setAppliedCoupon({ code, ...COUPONS[code] });
+      setCouponError('');
+      setCouponInput(code);
+      setCouponSuccessAnim(true);
+      setTimeout(() => setCouponSuccessAnim(false), 1500);
+      confetti({
+        particleCount: 90,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+    } else {
+      setCouponError(`Coupon "${code}" is invalid. Try CREATOR20 or LAUNCH50`);
+    }
+  };
+
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponInput('');
+    setCouponError('');
+  };
+
+  // Live price calculation for a given plan
+  const getPlanPrice = (planName) => {
+    const original = BASE_PRICES[planName] || 199;
+    if (!appliedCoupon) {
+      return {
+        original,
+        discounted: original,
+        isDiscounted: false,
+        percent: 0,
+        savings: 0
+      };
+    }
+    const discountAmount = Math.round(original * (appliedCoupon.discountPercent / 100));
+    const discounted = Math.max(0, original - discountAmount);
+    return {
+      original,
+      discounted,
+      isDiscounted: true,
+      percent: appliedCoupon.discountPercent,
+      savings: discountAmount
+    };
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -522,42 +595,84 @@ export default function App() {
                   paddingBottom: 'min(clamp(36px, 6vw, 80px), 7vh)'
                 }}
               >
-                <button
-                  className="chamfer-btn"
-                  onMouseEnter={() => setHeroCtaHover(true)}
-                  onMouseLeave={() => setHeroCtaHover(false)}
-                  onClick={() => navigateTo('build')}
-                  style={{
-                    background: heroCtaHover ? '#3fd0ef' : '#15BCDF',
-                    border: '1px solid #0fa3c2',
-                    color: '#1a1c1e',
-                    textTransform: 'uppercase',
-                    fontWeight: 700,
-                    letterSpacing: '0.14em',
-                    padding: '18px 34px',
-                    fontSize: 'clamp(13px, 2.2vw, 16px)',
-                    boxShadow: heroCtaHover
-                      ? '0 0 0 1px rgba(21,188,223,0.5), 0 14px 36px -8px rgba(15,163,194,0.85)'
-                      : '0 0 0 1px rgba(21,188,223,0.35), 0 10px 30px -12px rgba(15,163,194,0.6)',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: 12,
-                    cursor: 'pointer',
-                    transition: 'background 0.2s ease, box-shadow 0.2s ease',
-                    fontFamily: 'inherit'
-                  }}
-                >
-                  <span>START YOUR BUILD</span>
-                  <span
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 14 }}>
+                  <button
+                    className="chamfer-btn"
+                    onMouseEnter={() => setHeroCtaHover(true)}
+                    onMouseLeave={() => setHeroCtaHover(false)}
+                    onClick={() => navigateTo('build')}
                     style={{
-                      display: 'inline-block',
-                      width: 22,
-                      height: 1,
-                      backgroundColor: '#1a1c1e',
-                      flexShrink: 0
+                      background: heroCtaHover ? '#3fd0ef' : '#15BCDF',
+                      border: '1px solid #0fa3c2',
+                      color: '#1a1c1e',
+                      textTransform: 'uppercase',
+                      fontWeight: 700,
+                      letterSpacing: '0.14em',
+                      padding: '18px 34px',
+                      fontSize: 'clamp(13px, 2.2vw, 16px)',
+                      boxShadow: heroCtaHover
+                        ? '0 0 0 1px rgba(21,188,223,0.5), 0 14px 36px -8px rgba(15,163,194,0.85)'
+                        : '0 0 0 1px rgba(21,188,223,0.35), 0 10px 30px -12px rgba(15,163,194,0.6)',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: 12,
+                      cursor: 'pointer',
+                      transition: 'background 0.2s ease, box-shadow 0.2s ease',
+                      fontFamily: 'inherit'
                     }}
-                  />
-                </button>
+                  >
+                    <span>START YOUR BUILD</span>
+                    <span
+                      style={{
+                        display: 'inline-block',
+                        width: 22,
+                        height: 1,
+                        backgroundColor: '#1a1c1e',
+                        flexShrink: 0
+                      }}
+                    />
+                  </button>
+
+                  {/* Promo Coupon Pill */}
+                  <div
+                    onClick={() => {
+                      handleApplyCoupon('CREATOR20');
+                      navigateTo('build');
+                    }}
+                    title="Click to apply CREATOR20 for 20% OFF"
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: 8,
+                      padding: '6px 14px',
+                      backgroundColor: 'rgba(255, 255, 255, 0.85)',
+                      border: '1px solid rgba(21, 188, 223, 0.45)',
+                      boxShadow: '0 2px 10px rgba(0,0,0,0.04)',
+                      borderRadius: 20,
+                      cursor: 'pointer',
+                      backdropFilter: 'blur(8px)',
+                      transition: 'all 0.2s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = '#ffffff';
+                      e.currentTarget.style.borderColor = '#15BCDF';
+                      e.currentTarget.style.transform = 'translateY(-1px)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.85)';
+                      e.currentTarget.style.borderColor = 'rgba(21, 188, 223, 0.45)';
+                      e.currentTarget.style.transform = 'translateY(0)';
+                    }}
+                  >
+                    <span style={{ fontSize: 13 }}>🏷️</span>
+                    <span style={{ fontSize: 12, fontWeight: 700, color: '#1a1c1e', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                      Coupon: <span style={{ color: '#0891b2', textDecoration: 'underline' }}>CREATOR20</span> for 20% OFF
+                    </span>
+                    <span style={{ fontSize: 11, backgroundColor: '#15BCDF', color: '#1a1c1e', padding: '1px 6px', borderRadius: 4, fontWeight: 700 }}>
+                      APPLY & BUILD →
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
           </section>
@@ -1131,8 +1246,14 @@ export default function App() {
                   <h2 style={{ margin: '0 0 8px 0', fontSize: 26, fontWeight: 700, color: '#1a1c1e', textTransform: 'uppercase' }}>
                     Request Received!
                   </h2>
-                  <p style={{ margin: 0, fontSize: 15, color: '#6b6f72', maxWidth: 460, lineHeight: 1.6 }}>
-                    Thank you, <strong>{formData.fullName || 'there'}</strong>! We received your request for the <strong>{formData.plan}</strong> plan and will reply to <strong>{formData.email || 'your email'}</strong> within 24 hours.
+                  <p style={{ margin: 0, fontSize: 15, color: '#6b6f72', maxWidth: 480, lineHeight: 1.6 }}>
+                    Thank you, <strong>{formData.fullName || 'there'}</strong>! We received your request for the <strong>{formData.plan}</strong> plan
+                    {appliedCoupon ? (
+                      <> with coupon <strong style={{ color: '#0891b2' }}>{appliedCoupon.code}</strong> (<strong>{appliedCoupon.discountPercent}% OFF</strong>, total: <strong>{CURRENCY_SYMBOLS[formData.currency] || '₹'}{getPlanPrice(formData.plan).discounted}</strong>)</>
+                    ) : (
+                      <> (total: <strong>{CURRENCY_SYMBOLS[formData.currency] || '₹'}{getPlanPrice(formData.plan).original}</strong>)</>
+                    )}
+                    {' '}and will reply to <strong>{formData.email || 'your email'}</strong> within 24 hours.
                   </p>
                 </div>
 
@@ -1323,89 +1444,414 @@ export default function App() {
                   </select>
                 </div>
 
+                {/* Coupon / Promo Code Section */}
+                <div
+                  style={{
+                    backgroundColor: appliedCoupon ? 'rgba(21, 188, 223, 0.06)' : '#f8fafc',
+                    border: appliedCoupon ? '1.5px solid #15BCDF' : '1px dashed #cbd5e1',
+                    borderRadius: 14,
+                    padding: '16px 20px',
+                    transition: 'all 0.3s ease',
+                    boxShadow: couponSuccessAnim ? '0 0 20px rgba(21, 188, 223, 0.4)' : 'none'
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10, flexWrap: 'wrap', gap: 6 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <span style={{ fontSize: 16 }}>🏷️</span>
+                      <span style={{ fontSize: 13, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', color: '#1a1c1e' }}>
+                        Have a Coupon Code?
+                      </span>
+                    </div>
+                    {appliedCoupon && (
+                      <span
+                        style={{
+                          fontSize: 11,
+                          fontWeight: 700,
+                          backgroundColor: '#15BCDF',
+                          color: '#1a1c1e',
+                          padding: '2px 8px',
+                          borderRadius: 4,
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.06em'
+                        }}
+                      >
+                        Active: {appliedCoupon.discountPercent}% OFF
+                      </span>
+                    )}
+                  </div>
+
+                  {appliedCoupon ? (
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        backgroundColor: '#ffffff',
+                        border: '1px solid #15BCDF',
+                        borderRadius: 10,
+                        padding: '12px 16px',
+                        gap: 12,
+                        flexWrap: 'wrap'
+                      }}
+                    >
+                      <div>
+                        <div style={{ fontSize: 14, fontWeight: 700, color: '#0891b2', display: 'flex', alignItems: 'center', gap: 6 }}>
+                          <span>✓</span>
+                          <span>Coupon <strong>"{appliedCoupon.code}"</strong> applied!</span>
+                        </div>
+                        <div style={{ fontSize: 12, color: '#6b6f72', marginTop: 2 }}>
+                          {appliedCoupon.label} — Live discounts applied to all plans below!
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={handleRemoveCoupon}
+                        style={{
+                          background: 'none',
+                          border: '1px solid #e2e8f0',
+                          borderRadius: 6,
+                          padding: '6px 12px',
+                          fontSize: 12,
+                          fontWeight: 700,
+                          color: '#64748b',
+                          cursor: 'pointer',
+                          fontFamily: 'inherit',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.04em',
+                          transition: 'all 0.2s ease'
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.color = '#ef4444';
+                          e.currentTarget.style.borderColor = '#ef4444';
+                          e.currentTarget.style.backgroundColor = '#fef2f2';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.color = '#64748b';
+                          e.currentTarget.style.borderColor = '#e2e8f0';
+                          e.currentTarget.style.backgroundColor = 'transparent';
+                        }}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  ) : (
+                    <div>
+                      <div style={{ display: 'flex', gap: 8, alignItems: 'stretch' }}>
+                        <input
+                          type="text"
+                          placeholder="ENTER CODE (e.g. CREATOR20, LAUNCH50)"
+                          value={couponInput}
+                          onChange={(e) => {
+                            setCouponInput(e.target.value.toUpperCase());
+                            setCouponError('');
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              e.preventDefault();
+                              handleApplyCoupon();
+                            }
+                          }}
+                          style={{
+                            flex: 1,
+                            padding: '11px 14px',
+                            borderRadius: 8,
+                            border: couponError ? '1px solid #ef4444' : '1px solid #cbd5e1',
+                            backgroundColor: '#ffffff',
+                            fontSize: 13,
+                            fontWeight: 700,
+                            letterSpacing: '0.06em',
+                            textTransform: 'uppercase',
+                            color: '#1a1c1e',
+                            fontFamily: 'inherit',
+                            outline: 'none',
+                            transition: 'border-color 0.2s ease'
+                          }}
+                          onFocus={(e) => e.target.style.borderColor = '#15BCDF'}
+                          onBlur={(e) => {
+                            if (!couponError) e.target.style.borderColor = '#cbd5e1';
+                          }}
+                        />
+                        <button
+                          type="button"
+                          className="chamfer-btn"
+                          onClick={() => handleApplyCoupon()}
+                          style={{
+                            padding: '0 20px',
+                            backgroundColor: '#111827',
+                            border: '1px solid #000000',
+                            color: '#ffffff',
+                            fontSize: 12,
+                            fontWeight: 700,
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.08em',
+                            cursor: 'pointer',
+                            fontFamily: 'inherit',
+                            whiteSpace: 'nowrap',
+                            transition: 'all 0.2s ease'
+                          }}
+                          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#15BCDF'}
+                          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#111827'}
+                        >
+                          Apply Code
+                        </button>
+                      </div>
+
+                      {couponError && (
+                        <div style={{ marginTop: 6, fontSize: 12, color: '#ef4444', fontWeight: 600 }}>
+                          ⚠️ {couponError}
+                        </div>
+                      )}
+
+                      {/* Quick Apply Suggestions */}
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 10, flexWrap: 'wrap' }}>
+                        <span style={{ fontSize: 11, color: '#64748b', textTransform: 'uppercase', fontWeight: 700 }}>
+                          Try Coupons:
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => handleApplyCoupon('CREATOR20')}
+                          style={{
+                            background: '#ffffff',
+                            border: '1px solid #cbd5e1',
+                            borderRadius: 16,
+                            padding: '3px 10px',
+                            fontSize: 11,
+                            fontWeight: 700,
+                            color: '#0891b2',
+                            cursor: 'pointer',
+                            fontFamily: 'inherit',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: 4
+                          }}
+                        >
+                          <span>CREATOR20</span>
+                          <span style={{ color: '#15BCDF' }}>(20% OFF)</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleApplyCoupon('LAUNCH50')}
+                          style={{
+                            background: '#ffffff',
+                            border: '1px solid #cbd5e1',
+                            borderRadius: 16,
+                            padding: '3px 10px',
+                            fontSize: 11,
+                            fontWeight: 700,
+                            color: '#0891b2',
+                            cursor: 'pointer',
+                            fontFamily: 'inherit',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: 4
+                          }}
+                        >
+                          <span>LAUNCH50</span>
+                          <span style={{ color: '#15BCDF' }}>(50% OFF)</span>
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
                 {/* Select a Plan */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 6 }}>
-                  <label style={{ fontSize: 13, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', color: '#1a1c1e' }}>
-                    Select a Plan
-                  </label>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <label style={{ fontSize: 13, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', color: '#1a1c1e' }}>
+                      Select a Plan
+                    </label>
+                    {appliedCoupon && (
+                      <span style={{ fontSize: 12, fontWeight: 700, color: '#0891b2' }}>
+                        ⚡ Live Discount Active ({appliedCoupon.discountPercent}% OFF)
+                      </span>
+                    )}
+                  </div>
 
                   {/* Plan: Basic */}
-                  <div
-                    onClick={() => setFormData({ ...formData, plan: 'Basic' })}
-                    style={{
-                      padding: '16px 20px',
-                      borderRadius: 12,
-                      border: formData.plan === 'Basic' ? '2px solid #15BCDF' : '1px solid #e2e8f0',
-                      backgroundColor: formData.plan === 'Basic' ? 'rgba(21, 188, 223, 0.05)' : '#ffffff',
-                      boxShadow: formData.plan === 'Basic' ? '0 0 0 1px rgba(21, 188, 223, 0.2)' : 'none',
-                      cursor: 'pointer',
-                      transition: 'all 0.2s ease'
-                    }}
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-                      <span style={{ fontWeight: 700, fontSize: 16, color: '#1a1c1e', textTransform: 'uppercase' }}>
-                        Basic
-                      </span>
-                      <span style={{ marginLeft: 'auto', fontWeight: 700, fontSize: 16, color: '#15BCDF' }}>
-                        {CURRENCY_SYMBOLS[formData.currency] || '₹'}199
-                      </span>
-                    </div>
-                    <p style={{ margin: '6px 0 0 0', fontSize: 13, color: '#6b6f72', lineHeight: 1.5 }}>
-                      2 pages: 1st contact form (customizable), 2nd media kit.
-                    </p>
-                  </div>
+                  {(() => {
+                    const pricing = getPlanPrice('Basic');
+                    const currSymbol = CURRENCY_SYMBOLS[formData.currency] || '₹';
+                    return (
+                      <div
+                        onClick={() => setFormData({ ...formData, plan: 'Basic' })}
+                        style={{
+                          padding: '16px 20px',
+                          borderRadius: 12,
+                          border: formData.plan === 'Basic' ? '2px solid #15BCDF' : '1px solid #e2e8f0',
+                          backgroundColor: formData.plan === 'Basic' ? 'rgba(21, 188, 223, 0.05)' : '#ffffff',
+                          boxShadow: formData.plan === 'Basic' ? '0 0 0 1px rgba(21, 188, 223, 0.2)' : 'none',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease',
+                          position: 'relative'
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', flexWrap: 'wrap', gap: 8 }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                            <span style={{ fontWeight: 700, fontSize: 16, color: '#1a1c1e', textTransform: 'uppercase' }}>
+                              Basic
+                            </span>
+                            {pricing.isDiscounted && (
+                              <span
+                                style={{
+                                  fontSize: 10,
+                                  fontWeight: 700,
+                                  backgroundColor: '#15BCDF',
+                                  color: '#1a1c1e',
+                                  padding: '2px 6px',
+                                  borderRadius: 4,
+                                  letterSpacing: '0.04em'
+                                }}
+                              >
+                                -{pricing.percent}% OFF
+                              </span>
+                            )}
+                          </div>
+                          <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'baseline', gap: 6 }}>
+                            {pricing.isDiscounted && (
+                              <span style={{ textDecoration: 'line-through', color: '#94a3b8', fontSize: 14, fontWeight: 500 }}>
+                                {currSymbol}{pricing.original}
+                              </span>
+                            )}
+                            <span style={{ fontWeight: 700, fontSize: 17, color: pricing.isDiscounted ? '#0891b2' : '#15BCDF' }}>
+                              {pricing.discounted === 0 ? 'FREE' : `${currSymbol}${pricing.discounted}`}
+                            </span>
+                          </div>
+                        </div>
+                        {pricing.isDiscounted && (
+                          <div style={{ fontSize: 11, color: '#0891b2', fontWeight: 700, marginTop: 4 }}>
+                            🎉 You save {currSymbol}{pricing.savings} with coupon "{appliedCoupon.code}"!
+                          </div>
+                        )}
+                        <p style={{ margin: '6px 0 0 0', fontSize: 13, color: '#6b6f72', lineHeight: 1.5 }}>
+                          2 pages: 1st contact form (customizable), 2nd media kit.
+                        </p>
+                      </div>
+                    );
+                  })()}
 
                   {/* Plan: Standard */}
-                  <div
-                    onClick={() => setFormData({ ...formData, plan: 'Standard' })}
-                    style={{
-                      padding: '16px 20px',
-                      borderRadius: 12,
-                      border: formData.plan === 'Standard' ? '2px solid #15BCDF' : '1px solid #e2e8f0',
-                      backgroundColor: formData.plan === 'Standard' ? 'rgba(21, 188, 223, 0.05)' : '#ffffff',
-                      boxShadow: formData.plan === 'Standard' ? '0 0 0 1px rgba(21, 188, 223, 0.2)' : 'none',
-                      cursor: 'pointer',
-                      transition: 'all 0.2s ease'
-                    }}
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-                      <span style={{ fontWeight: 700, fontSize: 16, color: '#1a1c1e', textTransform: 'uppercase' }}>
-                        Standard
-                      </span>
-                      <span style={{ marginLeft: 'auto', fontWeight: 700, fontSize: 16, color: '#15BCDF' }}>
-                        {CURRENCY_SYMBOLS[formData.currency] || '₹'}399
-                      </span>
-                    </div>
-                    <p style={{ margin: '6px 0 0 0', fontSize: 13, color: '#6b6f72', lineHeight: 1.5 }}>
-                      4 pages: 1st contact form (customizable), 2nd Beacon Media Kit, 3rd & 4th anything you want (customizable).
-                    </p>
-                  </div>
+                  {(() => {
+                    const pricing = getPlanPrice('Standard');
+                    const currSymbol = CURRENCY_SYMBOLS[formData.currency] || '₹';
+                    return (
+                      <div
+                        onClick={() => setFormData({ ...formData, plan: 'Standard' })}
+                        style={{
+                          padding: '16px 20px',
+                          borderRadius: 12,
+                          border: formData.plan === 'Standard' ? '2px solid #15BCDF' : '1px solid #e2e8f0',
+                          backgroundColor: formData.plan === 'Standard' ? 'rgba(21, 188, 223, 0.05)' : '#ffffff',
+                          boxShadow: formData.plan === 'Standard' ? '0 0 0 1px rgba(21, 188, 223, 0.2)' : 'none',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease',
+                          position: 'relative'
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', flexWrap: 'wrap', gap: 8 }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                            <span style={{ fontWeight: 700, fontSize: 16, color: '#1a1c1e', textTransform: 'uppercase' }}>
+                              Standard
+                            </span>
+                            {pricing.isDiscounted && (
+                              <span
+                                style={{
+                                  fontSize: 10,
+                                  fontWeight: 700,
+                                  backgroundColor: '#15BCDF',
+                                  color: '#1a1c1e',
+                                  padding: '2px 6px',
+                                  borderRadius: 4,
+                                  letterSpacing: '0.04em'
+                                }}
+                              >
+                                -{pricing.percent}% OFF
+                              </span>
+                            )}
+                          </div>
+                          <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'baseline', gap: 6 }}>
+                            {pricing.isDiscounted && (
+                              <span style={{ textDecoration: 'line-through', color: '#94a3b8', fontSize: 14, fontWeight: 500 }}>
+                                {currSymbol}{pricing.original}
+                              </span>
+                            )}
+                            <span style={{ fontWeight: 700, fontSize: 17, color: pricing.isDiscounted ? '#0891b2' : '#15BCDF' }}>
+                              {pricing.discounted === 0 ? 'FREE' : `${currSymbol}${pricing.discounted}`}
+                            </span>
+                          </div>
+                        </div>
+                        {pricing.isDiscounted && (
+                          <div style={{ fontSize: 11, color: '#0891b2', fontWeight: 700, marginTop: 4 }}>
+                            🎉 You save {currSymbol}{pricing.savings} with coupon "{appliedCoupon.code}"!
+                          </div>
+                        )}
+                        <p style={{ margin: '6px 0 0 0', fontSize: 13, color: '#6b6f72', lineHeight: 1.5 }}>
+                          4 pages: 1st contact form (customizable), 2nd Beacon Media Kit, 3rd & 4th anything you want (customizable).
+                        </p>
+                      </div>
+                    );
+                  })()}
 
                   {/* Plan: Premium */}
-                  <div
-                    onClick={() => setFormData({ ...formData, plan: 'Premium' })}
-                    style={{
-                      padding: '16px 20px',
-                      borderRadius: 12,
-                      border: formData.plan === 'Premium' ? '2px solid #15BCDF' : '1px solid #e2e8f0',
-                      backgroundColor: formData.plan === 'Premium' ? 'rgba(21, 188, 223, 0.05)' : '#ffffff',
-                      boxShadow: formData.plan === 'Premium' ? '0 0 0 1px rgba(21, 188, 223, 0.2)' : 'none',
-                      cursor: 'pointer',
-                      transition: 'all 0.2s ease'
-                    }}
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-                      <span style={{ fontWeight: 700, fontSize: 16, color: '#1a1c1e', textTransform: 'uppercase' }}>
-                        Premium
-                      </span>
-                      <span style={{ marginLeft: 'auto', fontWeight: 700, fontSize: 16, color: '#15BCDF' }}>
-                        {CURRENCY_SYMBOLS[formData.currency] || '₹'}799
-                      </span>
-                    </div>
-                    <p style={{ margin: '6px 0 0 0', fontSize: 13, color: '#6b6f72', lineHeight: 1.5 }}>
-                      Any number of pages: contact page, media kit, and all customizable pages you want.
-                    </p>
-                  </div>
+                  {(() => {
+                    const pricing = getPlanPrice('Premium');
+                    const currSymbol = CURRENCY_SYMBOLS[formData.currency] || '₹';
+                    return (
+                      <div
+                        onClick={() => setFormData({ ...formData, plan: 'Premium' })}
+                        style={{
+                          padding: '16px 20px',
+                          borderRadius: 12,
+                          border: formData.plan === 'Premium' ? '2px solid #15BCDF' : '1px solid #e2e8f0',
+                          backgroundColor: formData.plan === 'Premium' ? 'rgba(21, 188, 223, 0.05)' : '#ffffff',
+                          boxShadow: formData.plan === 'Premium' ? '0 0 0 1px rgba(21, 188, 223, 0.2)' : 'none',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease',
+                          position: 'relative'
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', flexWrap: 'wrap', gap: 8 }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                            <span style={{ fontWeight: 700, fontSize: 16, color: '#1a1c1e', textTransform: 'uppercase' }}>
+                              Premium
+                            </span>
+                            {pricing.isDiscounted && (
+                              <span
+                                style={{
+                                  fontSize: 10,
+                                  fontWeight: 700,
+                                  backgroundColor: '#15BCDF',
+                                  color: '#1a1c1e',
+                                  padding: '2px 6px',
+                                  borderRadius: 4,
+                                  letterSpacing: '0.04em'
+                                }}
+                              >
+                                -{pricing.percent}% OFF
+                              </span>
+                            )}
+                          </div>
+                          <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'baseline', gap: 6 }}>
+                            {pricing.isDiscounted && (
+                              <span style={{ textDecoration: 'line-through', color: '#94a3b8', fontSize: 14, fontWeight: 500 }}>
+                                {currSymbol}{pricing.original}
+                              </span>
+                            )}
+                            <span style={{ fontWeight: 700, fontSize: 17, color: pricing.isDiscounted ? '#0891b2' : '#15BCDF' }}>
+                              {pricing.discounted === 0 ? 'FREE' : `${currSymbol}${pricing.discounted}`}
+                            </span>
+                          </div>
+                        </div>
+                        {pricing.isDiscounted && (
+                          <div style={{ fontSize: 11, color: '#0891b2', fontWeight: 700, marginTop: 4 }}>
+                            🎉 You save {currSymbol}{pricing.savings} with coupon "{appliedCoupon.code}"!
+                          </div>
+                        )}
+                        <p style={{ margin: '6px 0 0 0', fontSize: 13, color: '#6b6f72', lineHeight: 1.5 }}>
+                          Any number of pages: contact page, media kit, and all customizable pages you want.
+                        </p>
+                      </div>
+                    );
+                  })()}
                 </div>
 
                 {/* Submit CTA Button */}
