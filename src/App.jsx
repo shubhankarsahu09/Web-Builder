@@ -66,6 +66,7 @@ export default function App() {
     plan: 'Basic'
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submittedBuildSummary, setSubmittedBuildSummary] = useState(null);
 
   // Creator Support & Issue Form State
   const [supportData, setSupportData] = useState({
@@ -76,6 +77,7 @@ export default function App() {
     message: ''
   });
   const [isSupportSubmitted, setIsSupportSubmitted] = useState(false);
+  const [submittedSupportSummary, setSubmittedSupportSummary] = useState(null);
   const [supportHover, setSupportHover] = useState(false);
 
   const heroVideoRef = useRef(null);
@@ -237,6 +239,28 @@ export default function App() {
     }
   };
 
+  // Helper to refresh and reset all forms to default clean state
+  const resetAllForms = () => {
+    setFormData({
+      fullName: '',
+      email: '',
+      pagesNeeded: '',
+      websiteDetails: '',
+      currency: 'INR',
+      plan: 'Basic'
+    });
+    setSupportData({
+      creatorName: '',
+      email: '',
+      issueCategory: 'Technical Issue / Bug on Website',
+      priority: 'Normal',
+      message: ''
+    });
+    setAppliedCoupon(null);
+    setCouponInput('');
+    setCouponError('');
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     confetti({
@@ -244,6 +268,15 @@ export default function App() {
       spread: 70,
       origin: { y: 0.65 }
     });
+    setSubmittedBuildSummary({
+      fullName: formData.fullName,
+      email: formData.email,
+      plan: formData.plan,
+      currency: formData.currency,
+      appliedCoupon: appliedCoupon,
+      finalPrice: getPlanPrice(formData.plan).discounted
+    });
+    resetAllForms();
     setIsSubmitted(true);
   };
 
@@ -254,6 +287,13 @@ export default function App() {
       spread: 60,
       origin: { y: 0.85 }
     });
+    setSubmittedSupportSummary({
+      creatorName: supportData.creatorName,
+      email: supportData.email,
+      issueCategory: supportData.issueCategory,
+      priority: supportData.priority
+    });
+    resetAllForms();
     setIsSupportSubmitted(true);
   };
 
@@ -910,12 +950,16 @@ export default function App() {
                       Support Ticket Received!
                     </h3>
                     <p style={{ margin: 0, fontSize: 14, color: '#6b6f72', maxWidth: 440, lineHeight: 1.6 }}>
-                      Thanks, <strong>{supportData.creatorName || 'there'}</strong>! Your ticket regarding <strong>{supportData.issueCategory}</strong> has been logged. We will reply to <strong>{supportData.email || 'your email'}</strong> within a few hours.
+                      Thanks, <strong>{submittedSupportSummary?.creatorName || 'there'}</strong>! Your ticket regarding <strong>{submittedSupportSummary?.issueCategory || 'your request'}</strong> has been logged. We will reply to <strong>{submittedSupportSummary?.email || 'your email'}</strong> within a few hours.
                     </p>
                   </div>
                   <button
                     type="button"
-                    onClick={() => setIsSupportSubmitted(false)}
+                    onClick={() => {
+                      setIsSupportSubmitted(false);
+                      setSubmittedSupportSummary(null);
+                      resetAllForms();
+                    }}
                     style={{
                       marginTop: 8,
                       background: 'none',
@@ -1236,20 +1280,24 @@ export default function App() {
                     Request Received!
                   </h2>
                   <p style={{ margin: 0, fontSize: 15, color: '#6b6f72', maxWidth: 480, lineHeight: 1.6 }}>
-                    Thank you, <strong>{formData.fullName || 'there'}</strong>! We received your request for the <strong>{formData.plan}</strong> plan
-                    {appliedCoupon ? (
-                      <> with coupon <strong style={{ color: '#0891b2' }}>{appliedCoupon.code}</strong> (<strong>{appliedCoupon.discountPercent}% OFF</strong>, total: <strong>{CURRENCY_SYMBOLS[formData.currency] || '₹'}{getPlanPrice(formData.plan).discounted}</strong>)</>
+                    Thank you, <strong>{submittedBuildSummary?.fullName || 'there'}</strong>! We received your request for the <strong>{submittedBuildSummary?.plan || 'selected'}</strong> plan
+                    {submittedBuildSummary?.appliedCoupon ? (
+                      <> with coupon <strong style={{ color: '#0891b2' }}>{submittedBuildSummary.appliedCoupon.code}</strong> (<strong>{submittedBuildSummary.appliedCoupon.discountPercent}% OFF</strong>, total: <strong>{CURRENCY_SYMBOLS[submittedBuildSummary.currency] || '₹'}{submittedBuildSummary.finalPrice}</strong>)</>
                     ) : (
-                      <> (total: <strong>{CURRENCY_SYMBOLS[formData.currency] || '₹'}{getPlanPrice(formData.plan).original}</strong>)</>
+                      <> (total: <strong>{CURRENCY_SYMBOLS[submittedBuildSummary?.currency || formData.currency] || '₹'}{submittedBuildSummary?.finalPrice || '249'}</strong>)</>
                     )}
-                    {' '}and will reply to <strong>{formData.email || 'your email'}</strong> within 24 hours.
+                    {' '}and will reply to <strong>{submittedBuildSummary?.email || 'your email'}</strong> within 24 hours.
                   </p>
                 </div>
 
                 <div style={{ display: 'flex', gap: 16, marginTop: 12 }}>
                   <button
                     type="button"
-                    onClick={() => setIsSubmitted(false)}
+                    onClick={() => {
+                      setIsSubmitted(false);
+                      setSubmittedBuildSummary(null);
+                      resetAllForms();
+                    }}
                     style={{
                       background: 'none',
                       border: 'none',
