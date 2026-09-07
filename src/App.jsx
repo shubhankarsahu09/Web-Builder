@@ -13,11 +13,7 @@ const CURRENCY_SYMBOLS = {
 
 // Available coupons with their discount percentages
 const COUPONS = {
-  'CREATOR20': { discountPercent: 20, label: '20% Creator Discount' },
-  'FORGE20': { discountPercent: 20, label: '20% Early Bird Discount' },
-  'LAUNCH50': { discountPercent: 50, label: '50% Launch Special Discount' },
-  'VIP100': { discountPercent: 100, label: '100% Free VIP Access' },
-  'SAVE10': { discountPercent: 10, label: '10% Welcome Discount' }
+  'SETUPRIZX': { discountPercent: 20, label: '20% Off Special Discount' }
 };
 
 const BASE_PRICES = {
@@ -174,7 +170,7 @@ export default function App() {
         origin: { y: 0.6 }
       });
     } else {
-      setCouponError(`Coupon "${code}" is invalid. Try CREATOR20 or LAUNCH50`);
+      setCouponError(`Coupon "${code}" is invalid. Try SETUPRIZX`);
     }
   };
 
@@ -636,10 +632,10 @@ export default function App() {
                   {/* Promo Coupon Pill */}
                   <div
                     onClick={() => {
-                      handleApplyCoupon('CREATOR20');
+                      handleApplyCoupon('SETUPRIZX');
                       navigateTo('build');
                     }}
-                    title="Click to apply CREATOR20 for 20% OFF"
+                    title="Click to apply SETUPRIZX for 20% OFF"
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
@@ -666,7 +662,7 @@ export default function App() {
                   >
                     <span style={{ fontSize: 13 }}>🏷️</span>
                     <span style={{ fontSize: 12, fontWeight: 700, color: '#1a1c1e', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                      Coupon: <span style={{ color: '#0891b2', textDecoration: 'underline' }}>CREATOR20</span> for 20% OFF
+                      Coupon: <span style={{ color: '#0891b2', textDecoration: 'underline' }}>SETUPRIZX</span> for 20% OFF
                     </span>
                     <span style={{ fontSize: 11, backgroundColor: '#15BCDF', color: '#1a1c1e', padding: '1px 6px', borderRadius: 4, fontWeight: 700 }}>
                       APPLY & BUILD →
@@ -1539,7 +1535,7 @@ export default function App() {
                       <div style={{ display: 'flex', gap: 8, alignItems: 'stretch' }}>
                         <input
                           type="text"
-                          placeholder="ENTER CODE (e.g. CREATOR20, LAUNCH50)"
+                          placeholder="ENTER CODE (e.g. SETUPRIZX)"
                           value={couponInput}
                           onChange={(e) => {
                             setCouponInput(e.target.value.toUpperCase());
@@ -1602,14 +1598,14 @@ export default function App() {
                         </div>
                       )}
 
-                      {/* Quick Apply Suggestions */}
+                      {/* Quick Apply Suggestion */}
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 10, flexWrap: 'wrap' }}>
                         <span style={{ fontSize: 11, color: '#64748b', textTransform: 'uppercase', fontWeight: 700 }}>
-                          Try Coupons:
+                          Available Coupon:
                         </span>
                         <button
                           type="button"
-                          onClick={() => handleApplyCoupon('CREATOR20')}
+                          onClick={() => handleApplyCoupon('SETUPRIZX')}
                           style={{
                             background: '#ffffff',
                             border: '1px solid #cbd5e1',
@@ -1625,29 +1621,8 @@ export default function App() {
                             gap: 4
                           }}
                         >
-                          <span>CREATOR20</span>
+                          <span>SETUPRIZX</span>
                           <span style={{ color: '#15BCDF' }}>(20% OFF)</span>
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => handleApplyCoupon('LAUNCH50')}
-                          style={{
-                            background: '#ffffff',
-                            border: '1px solid #cbd5e1',
-                            borderRadius: 16,
-                            padding: '3px 10px',
-                            fontSize: 11,
-                            fontWeight: 700,
-                            color: '#0891b2',
-                            cursor: 'pointer',
-                            fontFamily: 'inherit',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: 4
-                          }}
-                        >
-                          <span>LAUNCH50</span>
-                          <span style={{ color: '#15BCDF' }}>(50% OFF)</span>
                         </button>
                       </div>
                     </div>
