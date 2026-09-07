@@ -32,7 +32,7 @@ export default function App() {
     return 'home';
   });
 
-  // Form State
+  // Build Form State
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -42,6 +42,17 @@ export default function App() {
     plan: 'Basic'
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  // Creator Support & Issue Form State
+  const [supportData, setSupportData] = useState({
+    creatorName: '',
+    email: '',
+    issueCategory: 'Technical Issue / Bug on Website',
+    priority: 'Normal',
+    message: ''
+  });
+  const [isSupportSubmitted, setIsSupportSubmitted] = useState(false);
+  const [supportHover, setSupportHover] = useState(false);
 
   const heroVideoRef = useRef(null);
   const aboutVideoRef = useRef(null);
@@ -131,6 +142,16 @@ export default function App() {
       origin: { y: 0.65 }
     });
     setIsSubmitted(true);
+  };
+
+  const handleSupportSubmit = (e) => {
+    e.preventDefault();
+    confetti({
+      particleCount: 75,
+      spread: 60,
+      origin: { y: 0.85 }
+    });
+    setIsSupportSubmitted(true);
   };
 
   return (
@@ -233,6 +254,19 @@ export default function App() {
                 }}
               >
                 ABOUT
+              </a>
+              <a
+                href="#support-section"
+                onClick={(e) => { e.preventDefault(); navigateTo('home', 'support-section'); }}
+                style={{
+                  fontWeight: 700,
+                  fontSize: 'clamp(12px, 2.4vw, 15px)',
+                  letterSpacing: '0.06em',
+                  color: '#3a3a3a',
+                  textDecoration: 'none'
+                }}
+              >
+                SUPPORT
               </a>
               <a
                 href="#/build"
@@ -362,6 +396,19 @@ export default function App() {
               }}
             >
               ABOUT
+            </a>
+            <a
+              href="#support-section"
+              onClick={(e) => { e.preventDefault(); navigateTo('home', 'support-section'); }}
+              style={{
+                color: '#1a1c1e',
+                fontWeight: 700,
+                fontSize: 16,
+                letterSpacing: '0.06em',
+                textDecoration: 'none'
+              }}
+            >
+              CREATOR SUPPORT
             </a>
             <a
               href="#/build"
@@ -683,6 +730,300 @@ export default function App() {
                   }}
                 />
               </div>
+            </div>
+          </section>
+
+          {/* SECTION 3 — CREATOR ISSUE & SUPPORT FORM (AT THE BOTTOM OF THE LANDING PAGE) */}
+          <section
+            id="support-section"
+            style={{
+              padding: 'clamp(60px, 8vw, 100px) clamp(20px, 5vw, 48px) clamp(40px, 6vw, 60px)',
+              maxWidth: 820,
+              margin: '0 auto',
+              scrollMarginTop: 60
+            }}
+          >
+            {/* Heading */}
+            <div style={{ marginBottom: 32 }}>
+              <h2
+                style={{
+                  margin: 0,
+                  fontSize: 'clamp(30px, 5.5vw, 54px)',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.01em',
+                  lineHeight: 0.98,
+                  color: '#2b3033'
+                }}
+              >
+                <div>CREATOR</div>
+                <div style={{ marginLeft: 'min(120px, 14vw)', color: '#15BCDF' }}>
+                  SUPPORT & CONTACT
+                </div>
+              </h2>
+              <p
+                style={{
+                  margin: '16px 0 0 min(120px, 14vw)',
+                  fontSize: 'clamp(14px, 1.5vw, 16px)',
+                  color: '#6b6f72',
+                  lineHeight: 1.6
+                }}
+              >
+                Need assistance with your website, want to report an issue, or request custom updates? Submit your request below and our team will get in touch directly.
+              </p>
+            </div>
+
+            {/* Support Form Card */}
+            <div
+              style={{
+                backgroundColor: '#ffffff',
+                borderRadius: 20,
+                border: '1px solid rgba(0, 0, 0, 0.08)',
+                boxShadow: '0 18px 48px rgba(0, 0, 0, 0.04)',
+                padding: 'clamp(24px, 5vw, 44px)'
+              }}
+            >
+              {isSupportSubmitted ? (
+                <div style={{ textAlign: 'center', padding: '36px 10px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
+                  <div
+                    style={{
+                      width: 56,
+                      height: 56,
+                      borderRadius: '50%',
+                      backgroundColor: 'rgba(21, 188, 223, 0.14)',
+                      color: '#15BCDF',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: 28,
+                      fontWeight: 700
+                    }}
+                  >
+                    ✓
+                  </div>
+                  <div>
+                    <h3 style={{ margin: '0 0 8px 0', fontSize: 24, fontWeight: 700, color: '#1a1c1e', textTransform: 'uppercase' }}>
+                      Support Ticket Received!
+                    </h3>
+                    <p style={{ margin: 0, fontSize: 14, color: '#6b6f72', maxWidth: 440, lineHeight: 1.6 }}>
+                      Thanks, <strong>{supportData.creatorName || 'there'}</strong>! Your ticket regarding <strong>{supportData.issueCategory}</strong> has been logged. We will reply to <strong>{supportData.email || 'your email'}</strong> within a few hours.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setIsSupportSubmitted(false)}
+                    style={{
+                      marginTop: 8,
+                      background: 'none',
+                      border: 'none',
+                      color: '#15BCDF',
+                      fontSize: 13,
+                      fontWeight: 700,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.08em',
+                      cursor: 'pointer',
+                      textDecoration: 'underline'
+                    }}
+                  >
+                    Submit another inquiry
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleSupportSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+                  {/* Row: Name + Email */}
+                  <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 16 }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                      <label style={{ fontSize: 13, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', color: '#1a1c1e' }}>
+                        Your Name or Handle
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="@yourhandle or Alex"
+                        value={supportData.creatorName}
+                        onChange={(e) => setSupportData({ ...supportData, creatorName: e.target.value })}
+                        style={{
+                          width: '100%',
+                          padding: '12px 16px',
+                          borderRadius: 8,
+                          border: '1px solid #e2e8f0',
+                          backgroundColor: '#ffffff',
+                          fontSize: 14,
+                          color: '#1a1c1e',
+                          fontFamily: 'inherit',
+                          outline: 'none',
+                          boxSizing: 'border-box',
+                          transition: 'border-color 0.2s ease'
+                        }}
+                        onFocus={(e) => e.target.style.borderColor = '#15BCDF'}
+                        onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
+                      />
+                    </div>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                      <label style={{ fontSize: 13, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', color: '#1a1c1e' }}>
+                        Contact Email
+                      </label>
+                      <input
+                        type="email"
+                        required
+                        placeholder="creator@email.com"
+                        value={supportData.email}
+                        onChange={(e) => setSupportData({ ...supportData, email: e.target.value })}
+                        style={{
+                          width: '100%',
+                          padding: '12px 16px',
+                          borderRadius: 8,
+                          border: '1px solid #e2e8f0',
+                          backgroundColor: '#ffffff',
+                          fontSize: 14,
+                          color: '#1a1c1e',
+                          fontFamily: 'inherit',
+                          outline: 'none',
+                          boxSizing: 'border-box',
+                          transition: 'border-color 0.2s ease'
+                        }}
+                        onFocus={(e) => e.target.style.borderColor = '#15BCDF'}
+                        onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Issue Category */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                    <label style={{ fontSize: 13, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', color: '#1a1c1e' }}>
+                      Topic / Issue Category
+                    </label>
+                    <select
+                      value={supportData.issueCategory}
+                      onChange={(e) => setSupportData({ ...supportData, issueCategory: e.target.value })}
+                      style={{
+                        width: '100%',
+                        padding: '12px 16px',
+                        borderRadius: 8,
+                        border: '1px solid #e2e8f0',
+                        backgroundColor: '#ffffff',
+                        fontSize: 14,
+                        color: '#1a1c1e',
+                        fontFamily: 'inherit',
+                        outline: 'none',
+                        cursor: 'pointer',
+                        boxSizing: 'border-box'
+                      }}
+                    >
+                      <option value="Technical Issue / Bug on Website">Technical Issue / Bug on Website</option>
+                      <option value="Update Media Kit or Brand Sponsors">Update Media Kit or Brand Sponsors</option>
+                      <option value="Custom Design or Feature Request">Custom Design or Feature Request</option>
+                      <option value="Domain or Hosting Help">Custom Domain or Hosting Help</option>
+                      <option value="Urgent Creator Support">Urgent Creator Support</option>
+                    </select>
+                  </div>
+
+                  {/* Priority Level */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                    <label style={{ fontSize: 13, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', color: '#1a1c1e' }}>
+                      Priority Level
+                    </label>
+                    <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                      {['Normal', 'High', 'Urgent ⚡'].map((lvl) => (
+                        <button
+                          key={lvl}
+                          type="button"
+                          onClick={() => setSupportData({ ...supportData, priority: lvl })}
+                          style={{
+                            padding: '8px 18px',
+                            borderRadius: 6,
+                            fontSize: 13,
+                            fontWeight: 700,
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.04em',
+                            border: supportData.priority === lvl ? '2px solid #15BCDF' : '1px solid #e2e8f0',
+                            backgroundColor: supportData.priority === lvl ? 'rgba(21, 188, 223, 0.1)' : '#ffffff',
+                            color: supportData.priority === lvl ? '#0fa3c2' : '#6b6f72',
+                            cursor: 'pointer',
+                            transition: 'all 0.2s ease',
+                            fontFamily: 'inherit'
+                          }}
+                        >
+                          {lvl}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Message */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                    <label style={{ fontSize: 13, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', color: '#1a1c1e' }}>
+                      Describe the Issue or Request
+                    </label>
+                    <textarea
+                      rows={4}
+                      required
+                      placeholder="Tell us what you need help with, any specific error messages, or what you'd like updated..."
+                      value={supportData.message}
+                      onChange={(e) => setSupportData({ ...supportData, message: e.target.value })}
+                      style={{
+                        width: '100%',
+                        padding: '12px 16px',
+                        borderRadius: 8,
+                        border: '1px solid #e2e8f0',
+                        backgroundColor: '#ffffff',
+                        fontSize: 14,
+                        color: '#1a1c1e',
+                        fontFamily: 'inherit',
+                        outline: 'none',
+                        boxSizing: 'border-box',
+                        resize: 'vertical',
+                        transition: 'border-color 0.2s ease'
+                      }}
+                      onFocus={(e) => e.target.style.borderColor = '#15BCDF'}
+                      onBlur={(e) => e.target.style.borderColor = '#e2e8f0'}
+                    />
+                  </div>
+
+                  {/* Submit Button */}
+                  <div style={{ marginTop: 8 }}>
+                    <button
+                      type="submit"
+                      className="chamfer-btn"
+                      onMouseEnter={() => setSupportHover(true)}
+                      onMouseLeave={() => setSupportHover(false)}
+                      style={{
+                        width: '100%',
+                        padding: '16px 24px',
+                        background: supportHover ? '#1a1c1e' : '#111827',
+                        border: '1px solid #000000',
+                        color: '#ffffff',
+                        fontSize: 14,
+                        fontWeight: 700,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.14em',
+                        boxShadow: supportHover
+                          ? '0 10px 28px rgba(0, 0, 0, 0.3)'
+                          : '0 4px 16px rgba(0, 0, 0, 0.2)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 12,
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease',
+                        fontFamily: 'inherit'
+                      }}
+                    >
+                      <span>Send Support Message</span>
+                      <span
+                        style={{
+                          display: 'inline-block',
+                          width: 22,
+                          height: 1,
+                          backgroundColor: '#15BCDF',
+                          flexShrink: 0
+                        }}
+                      />
+                    </button>
+                  </div>
+                </form>
+              )}
             </div>
           </section>
         </>
@@ -1158,6 +1499,37 @@ export default function App() {
             Forge Creator
           </span>
           <span>• Bespoke Websites & Media Portals</span>
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: 20, flexWrap: 'wrap' }}>
+          <a
+            href="#"
+            onClick={(e) => { e.preventDefault(); navigateTo('home'); }}
+            style={{ color: '#6b6f72', textDecoration: 'none', fontWeight: 700 }}
+          >
+            HOME
+          </a>
+          <a
+            href="#about-section"
+            onClick={(e) => { e.preventDefault(); navigateTo('home', 'about-section'); }}
+            style={{ color: '#6b6f72', textDecoration: 'none', fontWeight: 700 }}
+          >
+            ABOUT
+          </a>
+          <a
+            href="#support-section"
+            onClick={(e) => { e.preventDefault(); navigateTo('home', 'support-section'); }}
+            style={{ color: '#15BCDF', textDecoration: 'none', fontWeight: 700 }}
+          >
+            CREATOR SUPPORT
+          </a>
+          <a
+            href="#/build"
+            onClick={(e) => { e.preventDefault(); navigateTo('build'); }}
+            style={{ color: '#6b6f72', textDecoration: 'none', fontWeight: 700 }}
+          >
+            PRICING
+          </a>
         </div>
 
         <div>
